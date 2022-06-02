@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 //Refactor hot fix to move this into this function / component rather than calling it
 //in the index file.
-import { GetUserTransactions } from "../utils/getUserTransacitons";
 
 const Box = styled.div`
     margin-top: 20px;
