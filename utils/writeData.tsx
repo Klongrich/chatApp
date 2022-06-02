@@ -4,7 +4,7 @@ export async function writeData(userAddress : string, toAddress : string, messag
     const database = getDatabase();
     const currentTime = await new Date().getTime()
 
-    set(ref(database, 'messages/' + toAddress + '/unread/'+ userAddress+ '/' + currentTime.toString()), {
+    set(ref(database, 'messages/' + toAddress.toLowerCase() + '/unread/'+ userAddress.toLowerCase() + '/' + currentTime.toString()), {
       From: userAddress,
       Time: currentTime.toString(),
       Message: message
