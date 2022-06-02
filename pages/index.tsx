@@ -6,7 +6,7 @@ import {useEffect, useState, useCallback, useReducer} from "react";
 
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously } from "firebase/auth";
-import { getDatabase, ref, set, onValue, get, child, remove} from "firebase/database";
+import { getDatabase } from "firebase/database";
 import { addDoc, collection, getFirestore } from "firebase/firestore/lite";
 
 import Web3Modal from 'web3modal';
@@ -15,11 +15,11 @@ import { providers } from 'ethers'
 
 import { FirebaseConfig } from "../static/firbaseConfig";
 
+import { GetUserTransactions } from "../utils/getUserTransacitons";
+
 import SendBox from "../components/SendBox";
 import Inbox from "../components/Inbox";
-
-import { ParseInboxPayload } from "../utils/parseInboxPayload"
-
+import Contact from "../components/Contacts";
 
 // Initialize Firebase
 const app = initializeApp(FirebaseConfig);
@@ -30,9 +30,9 @@ const database = getDatabase();
 // Initalize web3 provider options
 const providerOptions = {
   walletconnect: {
-      package: WalletConnectProvider, // required
+      package: WalletConnectProvider,
       options: {
-          infuraId: process.env.INFURA_ID // required - Move to Envoirment Vairable
+          infuraId: process.env.INFURA_ID
       },
   },
 };
@@ -111,78 +111,8 @@ const Home: NextPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const { provider, web3Provider, address, chainId } = state
 
-  const [userMessages, setUserMessages] = useState([{from: "", message: "", time: ""}]);
-
-  // async function parseInboxPayload(payload : any) {
-  //   let _rawData = JSON.stringify(payload);
-  //   let _temp = _rawData.split("From");
-  //   let currentInbox = [{from: "", message: "", time: null}];
-
-  //   for (let i = 0; i < _temp.length; i++) {
-  //     let _temp2 = _temp[i].split("\"");
-
-  //     let _dataType = {
-  //       from : _temp2[2],
-  //       message : _temp2[6],
-  //       time : _temp2[10]
-  //     };
-  //     //@ts-ignore
-  //     currentInbox.push(_dataType);
-  //   }
-  //   //@ts-ignore
-  //   setUserMessages(currentInbox);
-  //   return(currentInbox);
-  // }
-
-  async function ListenForMessages(userAddress: string) {
-
-    console.log(userAddress);
-      const listining = ref(database, 'messages/' + userAddress + '/unread');
-
-      console.log("hello");
-      onValue(listining, (snapshot) => {
-        const data = snapshot.val();
-
-        console.log("Hello again");
-        console.log(data);
-        ParseInboxPayload(data, setUserMessages);
-    });
-  }
-
-  // async function readData() {
-  //   if (address) {
-  //     const dbRef = ref(getDatabase());
-  //     let userAddress = address.toLowerCase();
-
-  //     get(child(dbRef, 'messages/' + userAddress + '/unread')).then((snapshot) => {
-  //       if (snapshot.exists()) {
-  //         let data = snapshot.val();
-  //         ParseInboxPayload(data, setUserMessages);
-  //       } else {
-  //         console.log(address);
-  //         //@ts-ignore
-  //         setUserMessages([{from: "", message: "", time: null}]);
-  //         console.log("No data available");
-  //       }
-  //     }).catch((error) => {
-  //       console.error(error);
-  //     });
-  //   }
-  // }
-
-  // async function getReadMessages() {
-  //   const dbRef = ref(getDatabase());
-  //   get(child(dbRef, `messages/` + address + `/read`)).then((snapshot) => {
-  //     if (snapshot.exists()) {
-  //       let data = snapshot.val();
-  //       ParseInboxPayload(data, setUserMessages);
-  //     } else {
-  //       console.log("No data available");
-  //     }
-  //   }).catch((error) => {
-  //     console.error(error);
-  //   });
-  // }
+  //Hot fix for rendering shit in typescript / next
+  const [txsData, setTxsData] = useState([{blocknumber : "", address: ""}]);
 
   const connect = useCallback(async function () {
     // This is the initial `provider` that is returned when
@@ -197,10 +127,12 @@ const Home: NextPage = () => {
     const signer = web3Provider.getSigner()
     const address = await (await signer.getAddress()).toLowerCase()
 
-    //call function to listen for messages.
-    ListenForMessages(address);
-
     const network = await web3Provider.getNetwork();
+
+    //Fecthing recent transcations the users wallet has made
+    //Should be moved to Contacts, compnents as a "reccomened" or "recent"
+    let txsDatas = await GetUserTransactions(address);
+    setTxsData(txsDatas);
 
     dispatch({
       type: 'SET_WEB3_PROVIDER',
@@ -240,7 +172,6 @@ const Home: NextPage = () => {
   useEffect(() => {
     if (provider?.on) {
       const handleAccountsChanged = (accounts: string[]) => {
-        // eslint-disable-next-line no-console
         console.log('accountsChanged', accounts)
         dispatch({
           type: 'SET_ADDRESS',
@@ -248,13 +179,11 @@ const Home: NextPage = () => {
         })
       }
 
-      // https://docs.ethers.io/v5/concepts/best-practices/#best-practices--network-changes
       const handleChainChanged = (_hexChainId: string) => {
         window.location.reload()
       }
 
       const handleDisconnect = (error: { code: number; message: string }) => {
-        // eslint-disable-next-line no-console
         console.log('disconnect', error)
         disconnect()
       }
@@ -274,31 +203,6 @@ const Home: NextPage = () => {
     }
   }, [provider, disconnect])
 
-  // async function writeData(toAddress : string, message : string) {
-  //   const database = getDatabase();
-  //   const currentTime = await new Date().getTime()
-
-  //   set(ref(database, 'messages/' + toAddress + '/unread/'+ address+ '/' + currentTime.toString()), {
-  //     From: address,
-  //     Time: currentTime.toString(),
-  //     Message: message
-  //   });
-
-  //   console.log("set")
-  // }
-
-  // async function updateMessageStatus(from : string, time: any, message: string) {
-  //   const db = getDatabase();
-
-  //   remove(ref(db, 'messages/' + address + '/unread/' + from + '/' + time))
-
-  //   set(ref(db, 'messages/' + address + '/read/'+ from + '/' + time), {
-  //     From: from,
-  //     Time: time,
-  //     Message: message
-  //   });
-  // }
-
   //Have a create user function than be able to append and add contracts to firestore.
   async function saveContact() {
     const db = getFirestore();
@@ -306,7 +210,6 @@ const Home: NextPage = () => {
     const docRef = await addDoc(collection(db, "UserName"), {
       address: "TestInputDatas"
     });
-
     console.log("Document written with ID: ", docRef.id);
   }
 
@@ -348,23 +251,6 @@ const Home: NextPage = () => {
           <SendBox userAddress={address} />
         </>}
 
-        {/* <InputAddress type="text"
-                placeholder="Input To Address"
-                onChange={e => setToAddress(e.target.value)}/>
-        <br /> <br />
-
-        <textarea
-                placeholder="Input Message"
-                cols={40}
-                rows={5}
-                onChange={e => setMessage(e.target.value)}/>
-        <br /> <br />
-
-        <button onClick={() => writeData(toAddress, message)}>
-          Send Message
-        </button>
-        */}
-
         <p> We noticed this address is not saved in your contacts, would you like to save it?</p>
 
         <button>
@@ -375,41 +261,14 @@ const Home: NextPage = () => {
           test save contact
         </button>
 
+        {txsData && <>
+          <Contact txsData={txsData} />
+        </>}
+
         <br /> <br />
 
         <Inbox userAddress={address}
               database={database}/>
-
-        {/* <h2>Inbox</h2>
-
-        <ul>
-          <li>Read</li>
-          <li>unread</li>
-        </ul>
-
-        <h3> User: {address} </h3>
-        <button onClick={() => GetUnreadMessages(address, setUserMessages)}>
-          Show Unread Messages
-        </button>
-
-        <br /> <br />
-
-        <button onClick={() => GetReadMessages(address, setUserMessages)}>
-          Show Read Messages
-        </button>
-
-        {userMessages.map((data) =>
-          <>
-          {data.time != null && <>
-            <div onClick={() => UpdateMessageStatus(data.from, address, data.time, data.message)}>
-              <p> From: {data.from} </p>
-              <p> Time: {data.time} </p>
-              <p> Message: <br /> <br /> <br />{data.message} </p>
-            </div>
-            <br /> <br />
-            </>}
-          </>
-        )} */}
       </>}
     </div>
   )

@@ -8,10 +8,8 @@ export const GetUnreadMessages = (address : string | undefined, setUserMessages 
           let data = snapshot.val();
           ParseInboxPayload(data, setUserMessages);
         } else {
-          console.log(address);
           //@ts-ignore
           setUserMessages([{from: "", message: "", time: null}]);
-          console.log("No data available");
         }
       }).catch((error) => {
         console.error(error);

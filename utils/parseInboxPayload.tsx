@@ -14,6 +14,5 @@ export const ParseInboxPayload = (payload : any, setUserMessages: any) => {
       //@ts-ignore
       currentInbox.push(_dataType);
     }
-    console.log(currentInbox);
     setUserMessages(currentInbox);
   }

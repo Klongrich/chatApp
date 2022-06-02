@@ -1,3 +1,5 @@
+const { isPropertyAccessChain, isPropertyAccessExpression } = require('typescript')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -10,6 +12,7 @@ const nextConfig = {
     MESSAGING_SENDER_ID : process.env.MESSAGING_SENDER_ID,
     APP_ID : process.env.APP_ID,
     INFURA_ID : process.env.INFURA_ID,
+    ALCHEMY_API_KEY : process.env.ALCHEMY_API_KEY
   },
 }
 

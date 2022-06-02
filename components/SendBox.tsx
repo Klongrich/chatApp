@@ -7,7 +7,7 @@ import { writeData } from "../utils/writeData";
 const Container = styled.div`
     background-color: blue;
     height: 300px;
-    width: 650px;
+    width: 80%;
     border: 1px solid black;
 `
 const InputAddress = styled.input`

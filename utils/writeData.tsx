@@ -9,6 +9,4 @@ export async function writeData(userAddress : string, toAddress : string, messag
       Time: currentTime.toString(),
       Message: message
     });
-
-    console.log("set")
   }

@@ -5,7 +5,7 @@ import { UpdateMessageStatus } from "../utils/updateMessageStatus";
 import { GetReadMessages } from "../utils/getReadMessages";
 import { GetUnreadMessages } from "../utils/getUnreadMessages";
 
-import { getDatabase, ref, set, onValue, get, child, remove} from "firebase/database";
+import { ref, onValue } from "firebase/database";
 
 import { ParseInboxPayload } from "../utils/parseInboxPayload"
 
@@ -13,7 +13,7 @@ const Container = styled.div`
     background-color: purple;
 
     height: 500px;
-    width: 650px;
+    width: 80%;
     border: 1px solid black;
 `
 
@@ -21,17 +21,13 @@ export default function Inbox({userAddress, database} : any) {
 
     const [userMessages, setUserMessages] = useState([{from: "", message: "", time: ""}]);
 
+    //@ts-ignore
     useEffect(() => {
         async function ListenForMessages() {
-            console.log(userAddress);
               const listining = ref(database, 'messages/' + userAddress + '/unread');
 
-              console.log("hello");
               onValue(listining, (snapshot) => {
                 const data = snapshot.val();
-
-                console.log("Hello again");
-                console.log(data);
                 ParseInboxPayload(data, setUserMessages);
             });
           }
