@@ -9,10 +9,13 @@ const Box = styled.div`
     margin-top: 20px;
     padding-top: 5px;
     height: 340px;
-    width: 80%;
+    width: 100%;
     background-color: brown;
 
+    padding: 10px;
     overflow: hidden;
+
+    text-align: center;
 `
 
 export default function Contacts({txsData} : any) {
@@ -25,13 +28,12 @@ export default function Contacts({txsData} : any) {
                 <>
                 {data.address != "" &&
                 <>
-                    <p> Contact: {data.address} </p>
+                    <p> Contact: {data.address.substring(0,7) + "...." + data.address.substring(32, 42)} </p>
                     <p> blockNumber: {data.blocknumber} </p> <br/>
                     </>
                 }
                 </>
             )}
-            <h3>Huh</h3>
         </Box>
         </>
     )

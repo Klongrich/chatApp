@@ -13,7 +13,7 @@ const Container = styled.div`
     background-color: purple;
 
     height: 500px;
-    width: 80%;
+    width: 100%;
     border: 1px solid black;
 `
 

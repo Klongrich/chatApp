@@ -111,6 +111,8 @@ const Home: NextPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const { provider, web3Provider, address, chainId } = state
 
+  const [cutUserAddress, setCutUserAddress] = useState("");
+
   //Hot fix for rendering shit in typescript / next
   const [txsData, setTxsData] = useState([{blocknumber : "", address: ""}]);
 
@@ -126,6 +128,10 @@ const Home: NextPage = () => {
 
     const signer = web3Provider.getSigner()
     const address = await (await signer.getAddress()).toLowerCase()
+
+    const cutUserAddress = await address.substring(0, 5) + "...." + address.substring(address.length - 5, address.length)
+    console.log("cut address: " + cutUserAddress);
+    setCutUserAddress(cutUserAddress);
 
     const network = await web3Provider.getNetwork();
 
@@ -235,7 +241,7 @@ const Home: NextPage = () => {
         <h2>Logged In</h2>
 
         {web3Provider ? ( <>
-          <h3> User: {address} </h3>
+          <h3> User: {cutUserAddress} </h3>
           <button type="button" onClick={() => disconnect()}>
             Disconnect
           </button> </>
@@ -251,7 +257,7 @@ const Home: NextPage = () => {
           <SendBox userAddress={address} />
         </>}
 
-        <p> We noticed this address is not saved in your contacts, would you like to save it?</p>
+        {/* <p> We noticed this address is not saved in your contacts, would you like to save it?</p>
 
         <button>
           show contacts
@@ -259,7 +265,7 @@ const Home: NextPage = () => {
 
         <button onClick={() => saveContact()}>
           test save contact
-        </button>
+        </button> */}
 
         {txsData && <>
           <Contact txsData={txsData} />
