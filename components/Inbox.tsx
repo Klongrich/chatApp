@@ -29,14 +29,38 @@ const Container = styled.div`
     overflow: auto;
 `
 
+const ProfilePicBox = styled.div`
+    border-radius: 50%;
+    background-color: grey;
+
+    height: 42px;
+    width: 42px;
+
+    margin-top: 20px;
+    margin-left: 5px;
+    margin-bottom: -65px;
+`
+
+const LatestMessageBox = styled.div`
+    height: 40px;
+`
+
 const ContactBox = styled.div`
     text-align: left;
-    border-top: 1px solid white;
-    border-bottom: 1px solid white;
+
+    margin-top: -10px;
+
+    h4 {
+        padding-left: 65px;
+    }
 
     p {
-        padding-left: 10px;
+        padding-left: 65px;
         padding-right: 10px;
+        margin-top: -20px;
+
+        font-size: 12px;
+        color: #a3a3a3;
     }
 `
 
@@ -45,6 +69,14 @@ export const Inbox = ({userAddress, database, updateToChatRoom} : any) => {
     const [userMessages, setUserMessages] = useState([{from: "", message: "", time: ""}]);
     const [isMessaging, setIsMessaging] = useState(false);
     const [toAddress, setToAddress] = useState("");
+
+    function cutUserAddress(address : string) {
+        if (address) {
+            return (address.substring(0, 5) + "...." + address.substring(address.length - 5, address.length));
+        } else {
+            return (null);
+        }
+    }
 
     function getCurrentTime(unixTimeStamp : number) {
         var date = new Date(unixTimeStamp * 1000);
@@ -107,8 +139,12 @@ export const Inbox = ({userAddress, database, updateToChatRoom} : any) => {
             <>
                 {data.time != null && <>
                     <ContactBox onClick={() => updateToChatRoom(data.from, userAddress)}>
-                        <p> {data.from} </p>
-                        <p> {checkLatestMessageLength(data.message)} </p>
+                        <ProfilePicBox />
+                        <h4> <strong> {cutUserAddress(data.from)} </strong> </h4>
+
+                        <LatestMessageBox>
+                            <p> {checkLatestMessageLength(data.message)} </p>
+                        </LatestMessageBox>
                         {/* <p> {getCurrentDate(parseInt(data.time))} @ {getCurrentTime(parseInt(data.time))} </p> */}
                     </ContactBox>
                     <br /> <br />
