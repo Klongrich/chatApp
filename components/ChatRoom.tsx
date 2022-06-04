@@ -32,7 +32,7 @@ const ChatRoomContainer = styled.div`
     padding-top: 20px;
     padding-bottom: 20px;
 
-    height: 650px;
+    height: 490px;
 
     z-index: 1;
 
@@ -44,17 +44,19 @@ const ChatRoomContainer = styled.div`
 const FromBox = styled.div`
     background-color: red;
     text-align: left;
-    padding-left: 20px;
     width: 60%;
     margin-left: 3%;
 
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 1px;
+    padding-bottom: 1px;
     padding-left: 10px;
+    padding-right: 10px;
 
     margin-top: 15px;
 
     border-radius: 15px;
+
+    font-size: 12px;
 
     h4 {
         font-size: 10px;
@@ -64,18 +66,20 @@ const FromBox = styled.div`
 const ToBox = styled.div`
     background-color: blue;
     text-align: left;
-    padding-right: 20px;
+    padding-right: 10px;
+    padding-left: 10px;
     width: 60%;
     margin-left: 37%;
 
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 10px;
+    padding-top: 1px;
+    padding-bottom: 1px;
 
     margin-top: 15px;
 
     line-height: 1.2;
     border-radius: 15px;
+
+    font-size: 12px;
 
     h4 {
         font-size: 10px;
