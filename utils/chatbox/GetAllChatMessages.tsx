@@ -83,7 +83,7 @@ export async function GetAllChatMessages(toAddress : any , fromAddress : any) {
       //   }
       // }
 
-      return (sortedArray);
+      return (sortedArray.reverse());
     }
 }
 

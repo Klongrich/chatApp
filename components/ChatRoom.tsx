@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 
 import { ref, onValue } from "firebase/database";
@@ -34,17 +34,15 @@ const ChatRoomContainer = styled.div`
 
     height: 490px;
 
-    z-index: 1;
-
     overflow: auto;
     bottom: 0;
 
 `
 
 const FromBox = styled.div`
-    background-color: red;
-    text-align: left;
-    width: 60%;
+    background-color: #4a4a4a;
+    text-align: center;
+    width: 50%;
     margin-left: 3%;
 
     padding-top: 1px;
@@ -64,12 +62,12 @@ const FromBox = styled.div`
 `
 
 const ToBox = styled.div`
-    background-color: blue;
-    text-align: left;
+    background-color: #03A390;
+    text-align: center;
     padding-right: 10px;
     padding-left: 10px;
-    width: 60%;
-    margin-left: 37%;
+    width: 50%;
+    margin-left: 42%;
 
     padding-top: 1px;
     padding-bottom: 1px;
@@ -87,8 +85,10 @@ const ToBox = styled.div`
 `
 
 const InputMessage = styled.textarea`
-    width: 80%;
-    height: 50px;
+    width: 70%;
+    height: 45px;
+
+    margin-right: 40px;
 
     border-radius: 15px;
     color: white;
@@ -113,16 +113,17 @@ const InputMessage = styled.textarea`
 const InputBoxContainer = styled.div`
     background-color: black;
     border-top: 3px solid black;
-    padding-top: 25px;
+    padding-top: 20px;
     color: white;
     text-align: center;
-    height: 850px;
+    height: 100vh;
 `
 
 
 const SendPlaneContainer = styled.div`
     text-align: right;
-    padding-right: 60px;
+    padding-right: 32px;
+    padding-top: 5px;
     margin-top: -81px;
 `
 
@@ -131,6 +132,8 @@ export const ChatRoom = ({fromAddress, toAddress, database} : any ) => {
     const [chatMessages, setChatMessages] = useState([{from: "", message: "", time: ""}]);
 
     const [message, setMessage] = useState("");
+    const messagesEndRef = useRef(null);
+
 
     function cutUserAddress(address : string) {
         if (address) {
@@ -139,6 +142,13 @@ export const ChatRoom = ({fromAddress, toAddress, database} : any ) => {
             return (null);
         }
     }
+
+
+  const scrollToBottom = () => {
+    //@ts-ignore
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
 
     async function sendMessage() {
         setMessage(" ");
@@ -188,6 +198,7 @@ export const ChatRoom = ({fromAddress, toAddress, database} : any ) => {
 
     useEffect(() => {
         getMessages();
+        scrollToBottom();
     }, [])
 
     return (
@@ -200,12 +211,12 @@ export const ChatRoom = ({fromAddress, toAddress, database} : any ) => {
             {chatMessages.map((data) =>
                 <>
                     {data.time != null && <>
-                        {data.from == fromAddress && <>
+                        {data.from != fromAddress && <>
                             <FromBox>
                                 <p> {data.message} </p>
                             </FromBox>
                         </>}
-                        {data.from == toAddress && <>
+                        {data.from != toAddress && <>
                             <ToBox>
                                 <p> {data.message} </p>
                             </ToBox>
@@ -221,7 +232,7 @@ export const ChatRoom = ({fromAddress, toAddress, database} : any ) => {
                 <br /> <br /> <br />
 
                 <SendPlaneContainer>
-                    <SendPlane size={37} color="white" onClick={() => sendMessage()} />
+                    <SendPlane size={30} color="white" onClick={() => sendMessage()} />
                 </SendPlaneContainer>
             </InputBoxContainer>
 
