@@ -41,7 +41,7 @@ const ChatRoomContainer = styled.div`
 
 const FromBox = styled.div`
     background-color: #4a4a4a;
-    text-align: center;
+    text-align: left;
     width: 50%;
     margin-left: 3%;
 
@@ -63,7 +63,7 @@ const FromBox = styled.div`
 
 const ToBox = styled.div`
     background-color: #03A390;
-    text-align: center;
+    text-align: left;
     padding-right: 10px;
     padding-left: 10px;
     width: 50%;
