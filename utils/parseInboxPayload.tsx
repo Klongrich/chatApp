@@ -17,10 +17,10 @@ export const ParseInboxPayload = (payload : any, setUserMessages: any) => {
     setUserMessages(currentInbox);
   }
 
-  export const HomeScreenParseInboxPayload = (payload : any, setUserMessages: any, userAddress : any) => {
+  export async function HomeScreenParseInboxPayload(payload : any, setUserMessages: any, userAddress : any){
     let _rawData = JSON.stringify(payload);
     let _temp = _rawData.split("From");
-    let currentInbox = [{from: "", message: "", time: null}];
+    let currentInbox = [{from: "", message: "", alias: "", time: null}];
 
     for (let i = 0; i < _temp.length; i++) {
       let _temp2 = _temp[i].split("\"");
@@ -42,6 +42,15 @@ export const ParseInboxPayload = (payload : any, setUserMessages: any) => {
       index === self.findIndex((t) => (
         t.from === thing.from
     )));
+
+    for (let x = 0; x < currentInbox.length; x++) {
+      let alias = await localStorage.getItem(currentInbox[x].from);
+
+      if (alias) {
+        let newParse = alias.split(":");
+        currentInbox[x].alias = newParse[1].trim();
+      }
+    }
 
     setUserMessages(currentInbox);
   }

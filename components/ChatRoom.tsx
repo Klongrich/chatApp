@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 
+import { doc, getDoc } from "firebase/firestore/lite";
+
 import { ref, onValue } from "firebase/database";
 import { ParseInboxPayload } from "../utils/parseInboxPayload"
 
@@ -127,9 +129,10 @@ const SendPlaneContainer = styled.div`
     margin-top: -81px;
 `
 
-export const ChatRoom = ({fromAddress, toAddress, database} : any ) => {
+export const ChatRoom = ({fromAddress, toAddress, database, db} : any ) => {
 
     const [chatMessages, setChatMessages] = useState([{from: "", message: "", time: ""}]);
+    const [loadedToAddress, setLoadedToAddress] = useState("");
 
     const [message, setMessage] = useState("");
     const messagesEndRef = useRef(null);
@@ -194,6 +197,27 @@ export const ChatRoom = ({fromAddress, toAddress, database} : any ) => {
         //@ts-ignore
         setChatMessages(AllMessages);
         //console.log(AllMessages);
+    }
+
+    //Call This once the contact is created and returned to chat screen.
+    async function checkForNewAlias(from: string, to: string) {
+        console.log(from);
+        console.log(to);
+
+        const docRef = doc(db, from, to);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+          let docData = docSnap.data();
+          console.log(docData.alias);
+          setLoadedToAddress(docData.alias);
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+          //@ts-ignore
+          setLoadedToAddress(cutUserAddress(toAddress));
+        }
     }
 
     useEffect(() => {

@@ -74,22 +74,10 @@ const SendPlaneContainer = styled.div`
     padding-right: 55px;
 `
 
-const CachedAddresses = [
-    '0x85F7d4c115a62D1f20B2BFa425FB9C88eafD7A93',
-    '0xE60a337882054ac8F73178aF530162A2A5747009',
-    '0xa81708dB78B7D85a2DAB1B6Ab8eF1e9168310daC',
-    '0x7480E797370BAA425921D2F4697ee62dd79F41b9',
-    '0x38f369439AD70AeB9CA4A5E8d6f7990744dD7E04',
-    '0x5f119A1b0A2874C8cADE0C7d96E33033FE6F1d28',
-    '0x1EFB798D5fF29c80398635A6bb8f71026809c30a'
-  ];
-
-export const NewMessageScreen = ({userAddress, database} : any) => {
+export const NewMessageScreen = ({userAddress, updateToChatRoom, setNewMessage} : any) => {
 
     const [toAddress, setToAddress] = useState("");
     const [message, setMessage] = useState("Enter Message");
-
-    const [inChat, setInChat] = useState(false);
 
     async function sendMessage() {
         setMessage(" ");
@@ -106,30 +94,40 @@ export const NewMessageScreen = ({userAddress, database} : any) => {
         //Add Checks here to see if they messages sends successfully or not.
         await writeData(userAddress, toAddress, message);
 
-        setInChat(true);
+        updateToChatRoom(toAddress, userAddress);
+        setNewMessage(false);
     }
+
+
+      // onKeyUp handler function
+  const keyUpHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.code === "Escape") {
+      const confirm = window.confirm(
+        "Are you sure want to clear this text feild?"
+      );
+
+      if (confirm) {
+        console.log("Hello World");
+      }
+    }
+  };
 
     return (
         <>
-        {!inChat && <>
             <NewMessageBox>
                 <h2> New conversation</h2>
-                    <InputToAddress type="text" placeholder={"Recipient"} value={toAddress} onChange={e => setToAddress(e.target.value)} />
+                <InputToAddress type="text" placeholder={"Recipient"} value={toAddress} onChange={e => setToAddress(e.target.value)} />
             </NewMessageBox>
 
             <InputBoxContainer>
-                <InputMessage placeholder={"Enter Message"} value={message} onChange={e => setMessage(e.target.value)}  />
+                <InputMessage  placeholder={"Enter Message"} value={message} onChange={e => setMessage(e.target.value)}  />
                 <br /> <br /> <br />
 
                 <SendPlaneContainer>
                     <SendPlane size={40} color="white" onClick={() => sendMessage()} />
                 </SendPlaneContainer>
             </InputBoxContainer>
-        </>}
 
-        {inChat && <>
-            <ChatRoom toAddress={toAddress} fromAddress={userAddress} database={database} />
-        </>}
         </>
     )
 }

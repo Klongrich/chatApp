@@ -8,7 +8,7 @@ import {useEffect, useState, useCallback, useReducer} from "react";
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously } from "firebase/auth";
 import { getDatabase } from "firebase/database";
-import { addDoc, collection, getFirestore } from "firebase/firestore/lite";
+import { addDoc, collection, getFirestore, doc, setDoc, getDoc } from "firebase/firestore/lite";
 
 import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
@@ -16,11 +16,16 @@ import { providers } from 'ethers';
 
 import { GetUserTransactions } from "../utils/getUserTransacitons";
 import { Inbox } from "../components/Inbox";
+import { ContactBox } from "../components/ContactBox";
+import { NewContact } from "../components/NewContact";
 
 import { NewMessageScreen } from "../components/NewMessage";
 import { ChatRoom } from "../components/ChatRoom";
 import { ArrowBack } from "@styled-icons/boxicons-regular/ArrowBack";
-import { Message } from "@styled-icons/boxicons-regular/Message"
+import { Message } from "@styled-icons/boxicons-regular/Message";
+
+import { Add } from "@styled-icons/fluentui-system-filled/Add";
+import { ThreeDotsVertical } from "@styled-icons/bootstrap/ThreeDotsVertical"
 
 
 const FirebaseConfig = {
@@ -35,6 +40,7 @@ const FirebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(FirebaseConfig);
+const db = getFirestore(app);
 const auth = getAuth();
 signInAnonymously(auth);
 const database = getDatabase();
@@ -168,13 +174,6 @@ const NewMessageBox = styled.div`
   margin-left: 70%;
 `
 
-const BackArrowBox = styled.div`
-  margin-bottom: -50px;
-  padding-top: 40px;
-  background-color: black;
-  padding-left: 15px;
-`
-
 const LogOutArrow = styled.div`
   text-align: right;
   padding-top: 30px;
@@ -186,8 +185,46 @@ const NewMessageArrowBox = styled.div`
   margin-bottom: -50px;
   padding-top: 40px;
   background-color: black;
-  padding-left: 15px;
+  padding-left: 25px;
+`
 
+const BackArrowBox = styled.div`
+  background-color: black;
+  padding-left: 7%;
+
+  padding-top: 30px;
+`
+
+const AddContactBox = styled.div`
+  margin-top: -30px;
+  border: 1px solid black;
+  background-color: black;
+
+  padding-left: 83%;
+
+  margin-bottom: -55px;
+`
+
+const NewContactBackArrowBox = styled.div`
+  border: 1px solid black;
+  background-color: black;
+
+  padding-left: 83%;
+`
+
+const AddContactButton = styled.div`
+border-radius: 50%;
+width: 65px;
+height: 65px;
+
+padding-left: 13px;
+padding-top: 15px;
+
+background-color: #737373;
+box-shadow: 0px 4px 4px rgba(255, 255, 255, 0.25);
+
+margin-top: -410px;
+margin-left: 70%;
 `
 
 function reducer(state: StateType, action: ActionType): StateType {
@@ -225,6 +262,8 @@ const Home: NextPage = () => {
   const [cutUserAddress, setCutUserAddress] = useState("");
   const [newMessage, setNewMessage] = useState(false);
   const [chatRoom, setChatRoom] = useState(false);
+  const [showContacts, setShowContacts] = useState(false);
+  const [newContact, setNewContact] = useState(false);
 
   const [chatToAddress, setChatToAddress] = useState("");
   const [chatFromAddress, setChatFromAddress] = useState("");
@@ -246,7 +285,6 @@ const Home: NextPage = () => {
     const address = await (await signer.getAddress()).toLowerCase()
 
     const cutUserAddress = await address.substring(0, 5) + "...." + address.substring(address.length - 5, address.length)
-    console.log("cut address: " + cutUserAddress);
     setCutUserAddress(cutUserAddress);
 
     const network = await web3Provider.getNetwork();
@@ -367,7 +405,7 @@ const Home: NextPage = () => {
           </NewMessageArrowBox>
 
           {address && <>
-            <NewMessageScreen userAddress={address} database={database} />
+            <NewMessageScreen userAddress={address} updateToChatRoom={updateToChatRoom} setNewMessage={setNewMessage} />
           </>}
 
         </>}
@@ -380,33 +418,62 @@ const Home: NextPage = () => {
               </LogOutArrow>
               <h2>Messages</h2>
               <ul>
-                <li>All</li>
-                <li>Contacts</li>
+                <li onClick={() => setShowContacts(false)}>All</li>
+                <li onClick={() => setShowContacts(true)}>Contacts</li>
                 <li onClick={() => setNewMessage(true)}>+</li>
               </ul>
             </HeaderBox>
 
-            <Inbox userAddress={address}
+            {!showContacts && <>
+              <Inbox userAddress={address}
                     database={database}
                     updateToChatRoom={updateToChatRoom}
-            />
-
-            <NewMessageBox>
+                    db={db}
+              />
+              <NewMessageBox>
                 <Message size={40} color="white" onClick={() => setNewMessage(true)} />
-            </NewMessageBox>
+              </NewMessageBox>
+            </>}
+
+            {showContacts && <>
+              <ContactBox userAddress={address} db={db} updateToChatRoom={updateToChatRoom} />
+
+                <AddContactButton onClick={() => setNewContact(true)}>
+                  <Add size={35} color="white" />
+                </AddContactButton>
+            </>}
           </>}
 
           {chatRoom && <>
-            <BackArrowBox>
-              <ArrowBack size={28} color="white" onClick={() => setChatRoom(false)} />
-            </BackArrowBox>
-            <ChatRoom toAddress={chatToAddress}
+            {!newContact && <>
+              <BackArrowBox>
+                <ArrowBack size={28} color="white" onClick={() => setChatRoom(false)} />
+              </BackArrowBox>
+
+              <AddContactBox>
+                <Add size={28} color="white" onClick={() => setNewContact(true)}  />
+              </AddContactBox>
+
+              <ChatRoom toAddress={chatToAddress}
                       fromAddress={chatFromAddress}
-                      database={database} />
+                      database={database}
+                      db={db} />
+            </>}
+
+            {/* Update To Chat Room */}
+            {newContact && <>
+              <BackArrowBox>
+                <ArrowBack size={28} color="white" onClick={() => setNewContact(false)} />
+              </BackArrowBox>
+
+              <AddContactBox>
+                <ThreeDotsVertical size={28} color="white" />
+              </AddContactBox>
+
+              <NewContact userAddress={address} contactPublicKey={chatToAddress} db={db} />
+            </>}
           </>}
-
         </>}
-
       </>}
     </div>
   )

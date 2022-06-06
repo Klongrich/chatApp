@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 
-import { UpdateMessageStatus } from "../utils/updateMessageStatus";
-import { GetReadMessages } from "../utils/getReadMessages";
 import { GetUnreadMessages } from "../utils/getUnreadMessages";
+import { doc, getDoc } from "firebase/firestore/lite";
 
 import { GetAllChatMessages } from "../utils/chatbox/GetAllChatMessages";
 
@@ -64,9 +63,9 @@ const ContactBox = styled.div`
     }
 `
 
-export const Inbox = ({userAddress, database, updateToChatRoom} : any) => {
+export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
 
-    const [userMessages, setUserMessages] = useState([{from: "", message: "", time: ""}]);
+    const [userMessages, setUserMessages] = useState([{from: "", message: "", alias: "", time: ""}]);
     const [isMessaging, setIsMessaging] = useState(false);
     const [toAddress, setToAddress] = useState("");
 
@@ -94,19 +93,12 @@ export const Inbox = ({userAddress, database, updateToChatRoom} : any) => {
 
     function checkLatestMessageLength(Message : string) {
         if (Message != undefined) {
-        if (Message.length > 80) {
-            return(Message.substring(0, 80) + ".......")
-        } else {
-            return (Message);
+            if (Message.length > 80) {
+                return(Message.substring(0, 80) + ".......")
+            } else {
+                return (Message);
+            }
         }
-    }
-    }
-
-    async function GetChatRoomMessageTest() {
-        let Messages = await GetAllChatMessages("0x5f119A1b0A2874C8cADE0C7d96E33033FE6F1d28", "0x9c8830489E4f81B65d8c7a0A91D3C03bE24311bD");
-
-        console.log("Messages");
-        console.log(Messages);
     }
 
     useEffect(() => {
@@ -140,7 +132,14 @@ export const Inbox = ({userAddress, database, updateToChatRoom} : any) => {
                 {data.time != null && <>
                     <ContactBox onClick={() => updateToChatRoom(data.from, userAddress)}>
                         <ProfilePicBox />
-                        <h4> <strong> {cutUserAddress(data.from)} </strong> </h4>
+
+                        {data.alias && <>
+                            <h4> <strong> {data.alias} </strong> </h4>
+                        </>}
+
+                        {!data.alias && <>
+                            <h4> <strong> {cutUserAddress(data.from)} </strong> </h4>
+                        </>}
 
                         <LatestMessageBox>
                             <p> {checkLatestMessageLength(data.message)} </p>
