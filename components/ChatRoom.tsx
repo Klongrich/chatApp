@@ -2,15 +2,11 @@ import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 
 import { doc, getDoc } from "firebase/firestore/lite";
-
 import { ref, onValue } from "firebase/database";
-import { ParseInboxPayload } from "../utils/parseInboxPayload"
-
-import { MessagesTo } from "../utils/chatbox/MessagesTo";
-import { MessagesFrom } from "../utils/chatbox/MessageFrom";
 
 import { GetAllChatMessages } from "../utils/chatbox/GetAllChatMessages";
 import { SendPlane } from "@styled-icons/remix-fill/SendPlane";
+import { writeDataHotFix } from "../utils/writeData";
 import { writeData } from "../utils/writeData";
 
 const ChatRoomBox = styled.div`
@@ -129,7 +125,7 @@ const SendPlaneContainer = styled.div`
     margin-top: -81px;
 `
 
-export const ChatRoom = ({fromAddress, toAddress, database, db} : any ) => {
+export const ChatRoom = ({fromAddress, toAddress, toAlias, database, db} : any ) => {
 
     const [chatMessages, setChatMessages] = useState([{from: "", message: "", time: ""}]);
     const [loadedToAddress, setLoadedToAddress] = useState("");
@@ -137,10 +133,11 @@ export const ChatRoom = ({fromAddress, toAddress, database, db} : any ) => {
     const [message, setMessage] = useState("");
     const messagesEndRef = useRef(null);
 
-
     function cutUserAddress(address : string) {
-        if (address) {
+        if (address.includes("0x")) {
             return (address.substring(0, 5) + "...." + address.substring(address.length - 5, address.length));
+        } else if (address) {
+            return (address);
         } else {
             return (null);
         }
@@ -165,8 +162,9 @@ export const ChatRoom = ({fromAddress, toAddress, database, db} : any ) => {
             return ;
         }
 
-        //Add Checks here to see if they messages sends successfully or not.
+        //Add Checks here to see if there messages sends successfully or not.
         await writeData(fromAddress, toAddress, message);
+        await writeDataHotFix(fromAddress, toAddress, message);
     }
 
     useEffect(() => {
@@ -228,28 +226,32 @@ export const ChatRoom = ({fromAddress, toAddress, database, db} : any ) => {
     return (
         <>
             <ChatRoomBox>
+                {toAlias && <>
+                    <h4>{toAlias}</h4>
+                </>}
+                {!toAlias && <>
                 <h4> {cutUserAddress(toAddress)} </h4>
+                </>}
             </ChatRoomBox>
 
             <ChatRoomContainer>
-            {chatMessages.map((data) =>
-                <>
-                    {data.time != null && <>
-                        {data.from != fromAddress && <>
-                            <FromBox>
-                                <p> {data.message} </p>
-                            </FromBox>
+                {chatMessages.map((data) =>
+                    <>
+                        {data.time != null && <>
+                            {data.from != fromAddress && <>
+                                <FromBox>
+                                    <p> {data.message} </p>
+                                </FromBox>
+                            </>}
+                            {data.from != toAddress && <>
+                                <ToBox>
+                                    <p> {data.message} </p>
+                                </ToBox>
+                            </>}
                         </>}
-                        {data.from != toAddress && <>
-                            <ToBox>
-                                <p> {data.message} </p>
-                            </ToBox>
-                        </>}
-                    </>}
-                </>
-            )}
+                    </>
+                )}
             </ChatRoomContainer>
-
 
             <InputBoxContainer>
                 <InputMessage placeholder={"Enter Message"} value={message} onChange={e => setMessage(e.target.value)}  />

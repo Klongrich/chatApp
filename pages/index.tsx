@@ -268,6 +268,8 @@ const Home: NextPage = () => {
   const [chatToAddress, setChatToAddress] = useState("");
   const [chatFromAddress, setChatFromAddress] = useState("");
 
+  const [toAlias, setToAlias] = useState("");
+
   //Hot fix for rendering shit in typescript / next
   const [txsData, setTxsData] = useState([{blocknumber : "", address: ""}]);
 
@@ -373,10 +375,11 @@ const Home: NextPage = () => {
     console.log("Document written with ID: ", docRef.id);
   }
 
-  function updateToChatRoom(toAddress: string, fromAddress: string, ) {
+  function updateToChatRoom(toAddress: string, fromAddress: string, toAlias: string ) {
     setChatRoom(true);
     setChatToAddress(toAddress);
     setChatFromAddress(fromAddress);
+    setToAlias(toAlias);
   }
 
   return (
@@ -457,7 +460,8 @@ const Home: NextPage = () => {
               <ChatRoom toAddress={chatToAddress}
                       fromAddress={chatFromAddress}
                       database={database}
-                      db={db} />
+                      db={db}
+                      toAlias={toAlias} />
             </>}
 
             {/* Update To Chat Room */}
@@ -470,7 +474,12 @@ const Home: NextPage = () => {
                 <ThreeDotsVertical size={28} color="white" />
               </AddContactBox>
 
-              <NewContact userAddress={address} contactPublicKey={chatToAddress} db={db} />
+              <NewContact userAddress={address}
+                          contactPublicKey={chatToAddress}
+                          db={db}
+                          setNewContact={setNewContact}
+                          updateToChatRoom={updateToChatRoom}
+              />
             </>}
           </>}
         </>}

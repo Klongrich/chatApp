@@ -139,7 +139,7 @@ export const ContactBox = ({userAddress , db, updateToChatRoom} : any) => {
                 {allContactsInfo.map((data : any) =>
                     <>
                         {data.publicKey != "" && data.alias != "true,\"accounts\"" && <>
-                        <ContactContaier onClick={() => updateToChatRoom(data.publicKey, userAddress)}>
+                        <ContactContaier onClick={() => updateToChatRoom(data.publicKey, userAddress, data.alias)}>
                             <ProfilePicBox />
                             <h4> <strong> {data.alias} </strong> </h4>
                             <ContactsPublicKeyBox>

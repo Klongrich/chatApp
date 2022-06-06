@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 
-import { GetUnreadMessages } from "../utils/getUnreadMessages";
+import { GetUnreadMessages, GetSentMessages } from "../utils/getUnreadMessages";
 import { doc, getDoc } from "firebase/firestore/lite";
 
 import { GetAllChatMessages } from "../utils/chatbox/GetAllChatMessages";
@@ -66,6 +66,8 @@ const ContactBox = styled.div`
 export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
 
     const [userMessages, setUserMessages] = useState([{from: "", message: "", alias: "", time: ""}]);
+    const [sentMessages, setSentMessages] = useState([{from: "", message: "", alias: "", time: ""}]);
+
     const [isMessaging, setIsMessaging] = useState(false);
     const [toAddress, setToAddress] = useState("");
 
@@ -112,6 +114,7 @@ export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
           }
           ListenForMessages();
           GetUnreadMessages(userAddress, setUserMessages);
+          GetSentMessages(userAddress, setSentMessages);
     }, [])
 
     return (
@@ -123,14 +126,15 @@ export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
 
             <ChatRoom userAddress={userAddress}
                      toAddress={toAddress}
-                     database={database}/>
+                     database={database}
+            />
         </>}
 
         {!isMessaging && <>
             {userMessages.map((data) =>
             <>
                 {data.time != null && <>
-                    <ContactBox onClick={() => updateToChatRoom(data.from, userAddress)}>
+                    <ContactBox onClick={() => updateToChatRoom(data.from, userAddress, data.alias)}>
                         <ProfilePicBox />
 
                         {data.alias && <>
@@ -149,6 +153,29 @@ export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
                     <br /> <br />
                 </>}
             </>
+            )}
+
+            {sentMessages.map((data) =>
+                        <>
+                        {data.time != null && <>
+                            <ContactBox onClick={() => updateToChatRoom(data.from, userAddress, data.alias)}>
+                                <ProfilePicBox />
+                                {data.alias && <>
+                                    <h4> <strong> {data.alias} </strong> </h4>
+                                </>}
+
+                                {!data.alias && <>
+                                    <h4> <strong> {cutUserAddress(data.from)} </strong> </h4>
+                                </>}
+
+                                <LatestMessageBox>
+                                    <p> {checkLatestMessageLength(data.message)} </p>
+                                </LatestMessageBox>
+                                {/* <p> {getCurrentDate(parseInt(data.time))} @ {getCurrentTime(parseInt(data.time))} </p> */}
+                            </ContactBox>
+                            <br /> <br />
+                        </>}
+                    </>
             )}
         </>}
 

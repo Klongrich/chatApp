@@ -52,7 +52,7 @@ const InputAlias = styled.input`
  margin-top: 5px;
 `
 
-export const NewContact = ({userAddress, contactPublicKey, db} : any) => {
+export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, updateToChatRoom} : any) => {
 
     const [alias, setAlias] = useState("");
     const [email, setEmail] = useState("");
@@ -77,6 +77,9 @@ export const NewContact = ({userAddress, contactPublicKey, db} : any) => {
 
         let contactsRef = doc(db, "Contacts", userAddress);
         setDoc(contactsRef, { contactPublicKey : contactPublicKey}, {merge : true});
+
+        setNewContact(false);
+        updateToChatRoom(contactPublicKey, userAddress, alias);
     }
 
     return (
