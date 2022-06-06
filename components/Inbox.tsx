@@ -154,6 +154,13 @@ export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
                 </>}
             </>
             )}
+        </>}
+
+        </Container>
+    </>)
+}
+
+/*
 
             {sentMessages.map((data) =>
                         <>
@@ -171,14 +178,12 @@ export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
                                 <LatestMessageBox>
                                     <p> {checkLatestMessageLength(data.message)} </p>
                                 </LatestMessageBox>
-                                {/* <p> {getCurrentDate(parseInt(data.time))} @ {getCurrentTime(parseInt(data.time))} </p> */}
-                            </ContactBox>
-                            <br /> <br />
-                        </>}
-                    </>
-            )}
-        </>}
+                                 <p> {getCurrentDate(parseInt(data.time))} @ {getCurrentTime(parseInt(data.time))} </p> 
+                                </ContactBox>
+                                <br /> <br />
+                            </>}
+                        </>
+                )}
 
-        </Container>
-    </>)
-}
+
+*/
