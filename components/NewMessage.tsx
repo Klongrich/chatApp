@@ -95,7 +95,7 @@ export const NewMessageScreen = ({userAddress, updateToChatRoom, setNewMessage} 
 
         //Add Checks here to see if they messages sends successfully or not.
         await writeData(userAddress, toAddress, message);
-        await writeDataHotFix(userAddress, toAddress, message);
+        //await writeDataHotFix(userAddress, toAddress, message);
 
         updateToChatRoom(toAddress, userAddress);
         setNewMessage(false);
