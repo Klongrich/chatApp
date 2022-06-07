@@ -25,11 +25,11 @@ const Container = styled.div`
 `
 
 const ProfilePicBox = styled.div`
-    border-radius: 50%;
+    border-radius: 100%;
     background-color: grey;
 
-    height: 42px;
-    width: 42px;
+    height: 38px;
+    width: 38px;
 
     margin-top: 20px;
     margin-left: 5px;
@@ -43,18 +43,21 @@ const LatestMessageBox = styled.div`
 const ContactBox = styled.div`
     text-align: left;
 
-    margin-top: -10px;
+    margin-top: -20px;
+    padding-left: 10px;
 
     h4 {
-        padding-left: 65px;
+        padding-left: 60px;
+        padding-top: 2px;
+        font-size: 18px;
     }
 
     p {
-        padding-left: 65px;
-        padding-right: 10px;
-        margin-top: -20px;
+        padding-left: 60px;
+        padding-right: 28px;
+        margin-top: -22px;
 
-        font-size: 12px;
+        font-size: 13px;
         color: #a3a3a3;
     }
 `
