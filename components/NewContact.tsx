@@ -38,18 +38,18 @@ const EnterAliasBox = styled.div`
 
 
 const InputAlias = styled.input`
- width: 90%;
- border-bottom: 1px solid #f0f0f0;
- border-top: 1px solid black;
- border-left: 1px solid black;
- border-right: 1px solid black;
- padding: 10px;
- background-color: black;
- outline-width: 0;
- color: #f0f0f0;
- font-size: 14px;
- height: 40px;
- margin-top: 5px;
+    width: 90%;
+    border-bottom: 1px solid #f0f0f0;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    padding: 10px;
+    background-color: black;
+    outline-width: 0;
+    color: #f0f0f0;
+    font-size: 14px;
+    height: 40px;
+    margin-top: 5px;
 `
 
 export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, updateToChatRoom} : any) => {
@@ -103,7 +103,7 @@ export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, up
                     Save
                 </button>
 
-            {/* <h4 onClick={() => setViewMore(!viewMore)}> View More </h4> */}
+            <h4 onClick={() => setViewMore(!viewMore)}> View More </h4> 
 
             {viewMore && <>
             <input type="text" placeholder={"Name"} />

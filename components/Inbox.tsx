@@ -1,11 +1,7 @@
 import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 
-import { GetUnreadMessages, GetSentMessages } from "../utils/getUnreadMessages";
-import { doc, getDoc } from "firebase/firestore/lite";
-
-import { GetAllChatMessages } from "../utils/chatbox/GetAllChatMessages";
-
+import { GetUnreadMessages } from "../utils/getUnreadMessages";
 import { ref, onValue } from "firebase/database";
 
 import { HomeScreenParseInboxPayload } from "../utils/parseInboxPayload"
@@ -63,11 +59,9 @@ const ContactBox = styled.div`
     }
 `
 
-export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
+export const Inbox = ({userAddress, database, updateToChatRoom} : any) => {
 
     const [userMessages, setUserMessages] = useState([{from: "", message: "", alias: "", time: ""}]);
-    const [sentMessages, setSentMessages] = useState([{from: "", message: "", alias: "", time: ""}]);
-
     const [isMessaging, setIsMessaging] = useState(false);
     const [toAddress, setToAddress] = useState("");
 
@@ -77,20 +71,6 @@ export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
         } else {
             return (null);
         }
-    }
-
-    function getCurrentTime(unixTimeStamp : number) {
-        var date = new Date(unixTimeStamp * 1000);
-        var hours = date.getHours();
-        var minutes = "0" + date.getMinutes();
-        var seconds = "0" + date.getSeconds();
-        var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-        return(formattedTime);
-    }
-
-    function getCurrentDate(unixTimeStamp : number) {
-        var res = new Date(unixTimeStamp).toLocaleDateString('en-US');
-        return(res);
     }
 
     function checkLatestMessageLength(Message : string) {
@@ -106,33 +86,26 @@ export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
     useEffect(() => {
         async function ListenForMessages() {
               const listining = ref(database, 'messages/' + userAddress + '/unread');
-
               onValue(listining, (snapshot) => {
                 const data = snapshot.val();
                 HomeScreenParseInboxPayload(data, setUserMessages, userAddress);
             });
           }
           ListenForMessages();
-          GetUnreadMessages(userAddress, setUserMessages);
-          GetSentMessages(userAddress, setSentMessages);
     }, [])
 
     return (
     <>
         <Container>
-
         {isMessaging && <>
             <ArrowBack size={25} onClick={() => setIsMessaging(!isMessaging)}/>
-
             <ChatRoom userAddress={userAddress}
                      toAddress={toAddress}
                      database={database}
             />
         </>}
-
         {!isMessaging && <>
-            {userMessages.map((data) =>
-            <>
+            {userMessages.map((data) => <>
                 {data.time != null && <>
                     <ContactBox onClick={() => updateToChatRoom(data.from, userAddress, data.alias)}>
                         <ProfilePicBox />
@@ -148,42 +121,11 @@ export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
                         <LatestMessageBox>
                             <p> {checkLatestMessageLength(data.message)} </p>
                         </LatestMessageBox>
-                        {/* <p> {getCurrentDate(parseInt(data.time))} @ {getCurrentTime(parseInt(data.time))} </p> */}
                     </ContactBox>
                     <br /> <br />
                 </>}
-            </>
-            )}
+            </>)}
         </>}
-
         </Container>
     </>)
 }
-
-/*
-
-            {sentMessages.map((data) =>
-                        <>
-                        {data.time != null && <>
-                            <ContactBox onClick={() => updateToChatRoom(data.from, userAddress, data.alias)}>
-                                <ProfilePicBox />
-                                {data.alias && <>
-                                    <h4> <strong> {data.alias} </strong> </h4>
-                                </>}
-
-                                {!data.alias && <>
-                                    <h4> <strong> {cutUserAddress(data.from)} </strong> </h4>
-                                </>}
-
-                                <LatestMessageBox>
-                                    <p> {checkLatestMessageLength(data.message)} </p>
-                                </LatestMessageBox>
-                                 <p> {getCurrentDate(parseInt(data.time))} @ {getCurrentTime(parseInt(data.time))} </p> 
-                                </ContactBox>
-                                <br /> <br />
-                            </>}
-                        </>
-                )}
-
-
-*/

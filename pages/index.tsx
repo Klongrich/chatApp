@@ -25,7 +25,9 @@ import { ArrowBack } from "@styled-icons/boxicons-regular/ArrowBack";
 import { Message } from "@styled-icons/boxicons-regular/Message";
 
 import { Add } from "@styled-icons/fluentui-system-filled/Add";
-import { ThreeDotsVertical } from "@styled-icons/bootstrap/ThreeDotsVertical"
+import { ThreeDotsVertical } from "@styled-icons/bootstrap/ThreeDotsVertical";
+
+import { slide as Menu } from 'react-burger-menu'
 
 
 const FirebaseConfig = {
@@ -227,6 +229,57 @@ margin-top: -410px;
 margin-left: 70%;
 `
 
+const EditMessageBox = styled.div`
+
+background-color: yellow;
+`
+
+var burgerStyles = {
+  bmBurgerButton: {
+    position: 'fixed',
+    width: '36px',
+    height: '30px',
+    left: '36px',
+    top: '36px'
+  },
+  bmBurgerBars: {
+    background: 'black'
+  },
+  bmBurgerBarsHover: {
+    background: '#a90000'
+  },
+  bmCrossButton: {
+    height: '24px',
+    width: '24px'
+  },
+  bmCross: {
+    background: '#bdc3c7'
+  },
+  bmMenuWrap: {
+    position: 'fixed',
+    height: '100%'
+  },
+  bmMenu: {
+    background: '#363636',
+    padding: '2.5em 1.5em 0',
+    fontSize: '1.15em',
+    borderRadius: '30px'
+  },
+  bmMorphShape: {
+    fill: '#373a47'
+  },
+  bmItemList: {
+    color: 'white',
+    padding: '0.8em'
+  },
+  bmItem: {
+    display: 'inline-block'
+  },
+  bmOverlay: {
+    background: 'rgba(0, 0, 0, 0.3)'
+  }
+}
+
 function reducer(state: StateType, action: ActionType): StateType {
   switch (action.type) {
     case 'SET_WEB3_PROVIDER':
@@ -264,6 +317,8 @@ const Home: NextPage = () => {
   const [chatRoom, setChatRoom] = useState(false);
   const [showContacts, setShowContacts] = useState(false);
   const [newContact, setNewContact] = useState(false);
+
+  const [editMessages, setEditMessages] = useState(false);
 
   const [chatToAddress, setChatToAddress] = useState("");
   const [chatFromAddress, setChatFromAddress] = useState("");
@@ -471,8 +526,18 @@ const Home: NextPage = () => {
               </BackArrowBox>
 
               <AddContactBox>
-                <ThreeDotsVertical size={28} color="white" />
+                <ThreeDotsVertical size={28} color="white" onClick={() => setEditMessages(!editMessages)} />
               </AddContactBox>
+
+              {editMessages && <>
+              <EditMessageBox>
+                <Menu right styles={burgerStyles} width={'70%'} isOpen={editMessages} onClose={() => setEditMessages(false)}>
+                  <p>Delete Messages</p>
+                  <p>Delete Contact</p>
+                  <p>Edit Contact</p>
+                </Menu>
+              </EditMessageBox>
+              </>}
 
               <NewContact userAddress={address}
                           contactPublicKey={chatToAddress}

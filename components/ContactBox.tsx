@@ -53,40 +53,6 @@ export const ContactBox = ({userAddress , db, updateToChatRoom} : any) => {
     const [newContact, setNewContact] = useState(false);
     const [allContactsInfo, setAllContactsInfo] = useState([{}]);
 
-    async function readContactInformation() {
-        const docRef = doc(db, "UserPublicKey", "OtherUserKey");
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          console.log("Document data:", docSnap.data());
-        } else {
-          // doc.data() will be undefined in this case
-          console.log("No such document!");
-        }
-    }
-
-    async function getAllContacts() {
-        const querySnapshot = await getDocs(collection(db, userAddress));
-
-        let _temp : any = [];
-
-        querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
-            _temp.push(doc.data());
-
-            let datas = doc.data();
-
-            let pk = datas.publicKey;
-            let alias = datas.alias;
-
-            let stringToStore = pk + " : " + alias;
-
-            localStorage.setItem(pk, stringToStore);
-        });
-        setAllContactsInfo(_temp);
-    }
-
     function cutUserAddress(address : string) {
         if (address) {
             return (address.substring(0, 5) + "...." + address.substring(address.length - 5, address.length));

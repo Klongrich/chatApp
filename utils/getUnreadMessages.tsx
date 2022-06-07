@@ -15,20 +15,3 @@ export const GetUnreadMessages = (address : string | undefined, setUserMessages 
         console.error(error);
       });
   }
-
-  export const GetSentMessages = (address : string | undefined, setUserMessages : any) => {
-    const dbRef = ref(getDatabase());
-
-    console.log("---Test---:  " + address)
-    get(child(dbRef, 'sent/' + address + '/messages')).then((snapshot) => {
-        if (snapshot.exists()) {
-          let data = snapshot .val();
-          HomeScreenParseInboxPayload(data, setUserMessages, address);
-        } else {
-          //@ts-ignore
-          setUserMessages([{from: "", message: "", time: null}]);
-        }
-      }).catch((error) => {
-        console.error(error);
-      });
-  }

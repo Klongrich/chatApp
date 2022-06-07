@@ -1,14 +1,8 @@
 import React, { useState} from "react";
 import styled from "styled-components";
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { TextField } from '@material-ui/core';
-
-import  { ChatRoom }  from "./ChatRoom";
-
-import { writeData } from "../utils/writeData";
-import { writeDataHotFix } from "../utils/writeData";
 
 import { SendPlane } from "@styled-icons/remix-fill/SendPlane"
+import { SendMessage } from "../utils/sendMessage";
 
 const NewMessageBox = styled.div`
     background-color: black;
@@ -33,18 +27,18 @@ const InputBoxContainer = styled.div`
 `
 
 const InputToAddress = styled.input`
- width: 90%;
- border-bottom: 1px solid #f0f0f0;
- border-top: 1px solid black;
- border-left: 1px solid black;
- border-right: 1px solid black;
- padding: 10px;
- background-color: black;
- outline-width: 0;
- color: #f0f0f0;
- font-size: 14px;
- height: 40px;
- margin-top: 5px;
+    width: 90%;
+    border-bottom: 1px solid #f0f0f0;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    padding: 10px;
+    background-color: black;
+    outline-width: 0;
+    color: #f0f0f0;
+    font-size: 14px;
+    height: 40px;
+    margin-top: 5px;
 `
 
 const InputMessage = styled.textarea`
@@ -81,40 +75,6 @@ export const NewMessageScreen = ({userAddress, updateToChatRoom, setNewMessage} 
     const [toAddress, setToAddress] = useState("");
     const [message, setMessage] = useState("Enter Message");
 
-    async function sendMessage() {
-        setMessage(" ");
-        console.log("Hello");
-        console.log(message);
-        console.log(toAddress);
-        console.log(userAddress);
-
-        if (!toAddress) {
-            alert("Can't have Recicepnt Blak");
-            return ;
-        }
-
-        //Add Checks here to see if they messages sends successfully or not.
-        await writeData(userAddress, toAddress, message);
-        //await writeDataHotFix(userAddress, toAddress, message);
-
-        updateToChatRoom(toAddress, userAddress);
-        setNewMessage(false);
-    }
-
-
-      // onKeyUp handler function
-  const keyUpHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.code === "Escape") {
-      const confirm = window.confirm(
-        "Are you sure want to clear this text feild?"
-      );
-
-      if (confirm) {
-        console.log("Hello World");
-      }
-    }
-  };
-
     return (
         <>
             <NewMessageBox>
@@ -127,10 +87,17 @@ export const NewMessageScreen = ({userAddress, updateToChatRoom, setNewMessage} 
                 <br /> <br /> <br />
 
                 <SendPlaneContainer>
-                    <SendPlane size={40} color="white" onClick={() => sendMessage()} />
+                    <SendPlane size={40} color="white" onClick={() => SendMessage(
+                         userAddress,
+                         toAddress,
+                         message,
+                         updateToChatRoom,
+                         setNewMessage,
+                         setMessage
+                        )}
+                    />
                 </SendPlaneContainer>
             </InputBoxContainer>
-
         </>
     )
 }
