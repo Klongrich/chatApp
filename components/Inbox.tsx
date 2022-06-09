@@ -26,7 +26,7 @@ const Container = styled.div`
 
 const ProfilePicBox = styled.div`
     border-radius: 100%;
-    background-color: grey;
+    background-color: #d8d8d8;
 
     height: 38px;
     width: 38px;
@@ -43,13 +43,14 @@ const LatestMessageBox = styled.div`
 const ContactBox = styled.div`
     text-align: left;
 
-    margin-top: -20px;
+    margin-top: -30px;
     padding-left: 10px;
 
     h4 {
         padding-left: 60px;
         padding-top: 2px;
         font-size: 18px;
+        color: #fdfdfd;
     }
 
     p {
@@ -57,7 +58,7 @@ const ContactBox = styled.div`
         padding-right: 28px;
         margin-top: -22px;
 
-        font-size: 13px;
+        font-size: 12px;
         color: #a3a3a3;
     }
 `

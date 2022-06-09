@@ -88,11 +88,13 @@ export const ContactBox = ({userAddress , db, updateToChatRoom} : any) => {
                 //@ts-ignore
                 let _temp = userCache[x].split(":");
 
-                let _userContacts = {
-                    alias : _temp[1].trim(),
-                    publicKey : _temp[0].trim()
+                if (_temp[1]) {
+                    let _userContacts = {
+                        alias : _temp[1].trim(),
+                        publicKey : _temp[0].trim()
+                    }
+                    cachedContent.push(_userContacts);
                 }
-                cachedContent.push(_userContacts);
             }
         }
         setAllContactsInfo(cachedContent);

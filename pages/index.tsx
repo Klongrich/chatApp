@@ -105,26 +105,30 @@ const HeaderBox = styled.div`
 
   font-family: SanFransico;
 
-  margin-top: -30px;
+  margin-top: -20px;
   padding-top: 30px;
+  padding-bottom: 10px;
 
   h2 {
-    margin-left: 15px;
-    font-size: 36px;
+    margin-left: 20px;
+    font-size: 28px;
+    margin-bottom: 37px;
   }
 
   ul {
     list-style-type: none;
     padding-bottom: 20px;
     margin-bottom: 30px;
-    margin-left: -35px;
+    margin-left: -30px;
   }
 
   li {
     display: inline-block;
-    font-size: 20px;
+    font-size: 19px;
     padding-left: 12px;
     padding-right: 12px;
+
+    color: #d8d8d8;
 
     :hover {
       color: blue;
@@ -179,8 +183,8 @@ const NewMessageBox = styled.div`
 const LogOutArrow = styled.div`
   text-align: right;
   padding-top: 30px;
-  padding-right: 25px;
-  margin-bottom: -63px;
+  padding-right: 32px;
+  margin-bottom: -53px;
 `
 
 const NewMessageArrowBox = styled.div`
