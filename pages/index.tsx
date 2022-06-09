@@ -29,7 +29,6 @@ import { ThreeDotsVertical } from "@styled-icons/bootstrap/ThreeDotsVertical";
 
 import { slide as Menu } from 'react-burger-menu'
 
-
 const FirebaseConfig = {
   apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
@@ -219,23 +218,22 @@ const NewContactBackArrowBox = styled.div`
 `
 
 const AddContactButton = styled.div`
-border-radius: 50%;
-width: 65px;
-height: 65px;
+  border-radius: 50%;
+  width: 65px;
+  height: 65px;
 
-padding-left: 13px;
-padding-top: 15px;
+  padding-left: 13px;
+  padding-top: 15px;
 
-background-color: #737373;
-box-shadow: 0px 4px 4px rgba(255, 255, 255, 0.25);
+  background-color: #737373;
+  box-shadow: 0px 4px 4px rgba(255, 255, 255, 0.25);
 
-margin-top: -410px;
-margin-left: 70%;
+  margin-top: -410px;
+  margin-left: 70%;
 `
 
 const EditMessageBox = styled.div`
-
-background-color: yellow;
+  background-color: yellow;
 `
 
 var burgerStyles = {
@@ -548,6 +546,7 @@ const Home: NextPage = () => {
                           db={db}
                           setNewContact={setNewContact}
                           updateToChatRoom={updateToChatRoom}
+                          setEditMessages={setEditMessages}
               />
             </>}
           </>}

@@ -80,8 +80,7 @@ const InputAlias = styled.input`
 `
 
 const BottomButtonContainer = styled.div`
-background-color: black;
-
+    background-color: black;
 `
 
 const MiddleButtonContainer = styled.div`
@@ -90,26 +89,22 @@ const MiddleButtonContainer = styled.div`
 `
 
 const BottomButtonCancle = styled.div`
-display: inline-block;
+    display: inline-block;
 
-width: 40%;
-text-align: center;
+    width: 40%;
+    text-align: center;
 
-border-radius: 20px;
-margin-left: 6%;
-
+    border-radius: 20px;
+    margin-left: 6%;
 `
 
 const BottomButtonSave = styled.div`
+    display: inline-block;
+    width: 40%;
+    text-align: center;
 
-display: inline-block;
-
-width: 40%;
-text-align: center;
-
-border-radius: 20px;
-margin-left: 6%;
-
+    border-radius: 20px;
+    margin-left: 6%;
 `
 
 export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, updateToChatRoom} : any) => {
@@ -154,11 +149,8 @@ export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, up
 
         await setDoc(doc(db, userAddress, contactPublicKey), docContactData);
 
-        //Write To Cache
         await localStorage.setItem(contactPublicKey, contactPublicKey + ":" + alias);
 
-        //console.log("--Updating cache--");
-        //console.log(userAddress + contactPublicKey);
         await writeToCache(contactPublicKey + userAddress, docContactData, contactPublicKey);
 
         let contactsRef = doc(db, "Contacts", userAddress);
@@ -189,9 +181,6 @@ export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, up
 
     //Call This once the contact is created and returned to chat screen.
     async function getContactInfo(from: string, to: string) {
-        //console.log(from);
-        //console.log(to);
-
         const docRef = doc(db, from, to);
         const docSnap = await getDoc(docRef);
 
@@ -204,15 +193,10 @@ export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, up
         }
     }
 
-    async function TestCache(from : string, to : string) {
+    async function CheckCache(from : string, to : string) {
         let Key = to + from;
 
-        // console.log("---Key---");
-        // console.log(Key);
         let isCached = await localStorage.getItem(Key)
-
-        // console.log("---isCached---")
-        // console.log(isCached);
 
         if (isCached == null) {
             await getContactInfo(from, to);
@@ -222,13 +206,6 @@ export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, up
             let email = await localStorage.getItem(Key + "email");
             let phoneNumber = await localStorage.getItem(Key + "phoneNumber");
 
-            // console.log("----From Cache----")
-            // console.log(publicKey);
-            // console.log(alias);
-            // console.log(email);
-            // console.log(phoneNumber);
-
-
             setAlias(alias ? alias : "Alias");
             setName(publicKey ? publicKey : "Public Key");
             setEmail(email ? email : "Email");
@@ -237,8 +214,7 @@ export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, up
     }
 
     useEffect(() => {
-        //console.log("Hello World");
-        TestCache(userAddress, contactPublicKey);
+        CheckCache(userAddress, contactPublicKey);
     }, [])
 
     return (

@@ -4,8 +4,8 @@ import { getDatabase, ref, get, child} from "firebase/database";
 export const MessagesFrom = (toAddress : string, fromAddress : string, setUserMessages : any) => {
     const dbRef = ref(getDatabase());
 
-    console.log("FROM - Before database call TO: " + toAddress.toLowerCase());
-    console.log("FROM - Before database call FROM: " + fromAddress);
+    // console.log("FROM - Before database call TO: " + toAddress.toLowerCase());
+    // console.log("FROM - Before database call FROM: " + fromAddress);
 
     get(child(dbRef, 'messages/' + fromAddress + '/unread/' + toAddress.toLowerCase())).then((snapshot) => {
         if (snapshot.exists()) {

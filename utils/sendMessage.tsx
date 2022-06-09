@@ -14,13 +14,13 @@ export async function SendMessage(
 {
     setMessage(" ");
 
-    console.log("Hello");
-    console.log(message);
-    console.log(toAddress);
-    console.log(fromAddress);
-
     if (!toAddress) {
         alert("Can't have Recicepnt Blak");
+        return ;
+    }
+
+    if (fromAddress = toAddress) {
+        alert("User Can't send messge to self");
         return ;
     }
 

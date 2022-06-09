@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components"
 
-import { doc, setDoc, getDoc, Timestamp, getDocs, collection } from "firebase/firestore/lite";
+import { cutUserAddress } from "../utils/strings/cutUserAddress";
 
 const Container = styled.div`
     background-color: black;
@@ -52,14 +52,6 @@ export const ContactBox = ({userAddress , db, updateToChatRoom} : any) => {
 
     const [newContact, setNewContact] = useState(false);
     const [allContactsInfo, setAllContactsInfo] = useState([{}]);
-
-    function cutUserAddress(address : string) {
-        if (address) {
-            return (address.substring(0, 5) + "...." + address.substring(address.length - 5, address.length));
-        } else {
-            return (null);
-        }
-    }
 
     function allStorage() {
         var values = [],

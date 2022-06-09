@@ -5,6 +5,7 @@ import { GetUnreadMessages } from "../utils/getUnreadMessages";
 import { ref, onValue } from "firebase/database";
 
 import { HomeScreenParseInboxPayload } from "../utils/parseInboxPayload"
+import { cutUserAddress } from "../utils/strings/cutUserAddress";
 
 import { ChatRoom }  from "./ChatRoom";
 import { ArrowBack } from "@styled-icons/boxicons-regular/ArrowBack";
@@ -69,13 +70,6 @@ export const Inbox = ({userAddress, database, updateToChatRoom} : any) => {
     const [isMessaging, setIsMessaging] = useState(false);
     const [toAddress, setToAddress] = useState("");
 
-    function cutUserAddress(address : string) {
-        if (address) {
-            return (address.substring(0, 5) + "...." + address.substring(address.length - 5, address.length));
-        } else {
-            return (null);
-        }
-    }
 
     function checkLatestMessageLength(Message : string) {
         if (Message != undefined) {

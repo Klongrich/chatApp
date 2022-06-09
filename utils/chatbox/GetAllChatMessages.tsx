@@ -1,13 +1,6 @@
 import React, {useEffect} from "react";
 import { getDatabase, ref, get, child} from "firebase/database";
-
-async function sortByTime(array : any, key : any) {
-  return array.sort(function(a : any, b : any)
-  {
-   var x = a[key]; var y = b[key];
-   return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-  });
-}
+import { sortByTime } from "../sort/sortByTime";
 
 export async function GetAllChatMessages(toAddress : any , fromAddress : any) {
     const dbRef = ref(getDatabase());
@@ -38,7 +31,7 @@ export async function GetAllChatMessages(toAddress : any , fromAddress : any) {
             }
           }
         } else {
-          console.log("No Data")
+          console.log("No Messages Found")
         }
       }).catch((error) => {
         console.error(error);
@@ -66,8 +59,7 @@ export async function GetAllChatMessages(toAddress : any , fromAddress : any) {
           }
         } else {
           //@ts-ignore
-          console.log(toAddress);
-          console.log(fromAddress);
+          console.log("No Messages Found");
         }
       }).catch((error) => {
         console.error(error);
@@ -76,12 +68,6 @@ export async function GetAllChatMessages(toAddress : any , fromAddress : any) {
       let result = currentFromInbox.concat(currentToInbox);
 
       sortedArray = await sortByTime(result, "time");
-
-      // for (let x = 0; x < result.length; x++) {
-      //   if (result[x].time != null && result[x].time != undefined) {
-      //     console.log(result[x]);
-      //   }
-      // }
 
       return (sortedArray.reverse());
     }
