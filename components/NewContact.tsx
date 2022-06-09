@@ -157,8 +157,8 @@ export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, up
         //Write To Cache
         await localStorage.setItem(contactPublicKey, contactPublicKey + ":" + alias);
 
-        console.log("--Updating cache--");
-        console.log(userAddress + contactPublicKey);
+        //console.log("--Updating cache--");
+        //console.log(userAddress + contactPublicKey);
         await writeToCache(contactPublicKey + userAddress, docContactData, contactPublicKey);
 
         let contactsRef = doc(db, "Contacts", userAddress);
@@ -189,8 +189,8 @@ export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, up
 
     //Call This once the contact is created and returned to chat screen.
     async function getContactInfo(from: string, to: string) {
-        console.log(from);
-        console.log(to);
+        //console.log(from);
+        //console.log(to);
 
         const docRef = doc(db, from, to);
         const docSnap = await getDoc(docRef);
@@ -207,12 +207,12 @@ export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, up
     async function TestCache(from : string, to : string) {
         let Key = to + from;
 
-        console.log("---Key---");
-        console.log(Key);
+        // console.log("---Key---");
+        // console.log(Key);
         let isCached = await localStorage.getItem(Key)
 
-        console.log("---isCached---")
-        console.log(isCached);
+        // console.log("---isCached---")
+        // console.log(isCached);
 
         if (isCached == null) {
             await getContactInfo(from, to);
@@ -222,11 +222,11 @@ export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, up
             let email = await localStorage.getItem(Key + "email");
             let phoneNumber = await localStorage.getItem(Key + "phoneNumber");
 
-            console.log("----From Cache----")
-            console.log(publicKey);
-            console.log(alias);
-            console.log(email);
-            console.log(phoneNumber);
+            // console.log("----From Cache----")
+            // console.log(publicKey);
+            // console.log(alias);
+            // console.log(email);
+            // console.log(phoneNumber);
 
 
             setAlias(alias ? alias : "Alias");
@@ -237,7 +237,7 @@ export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, up
     }
 
     useEffect(() => {
-        console.log("Hello World");
+        //console.log("Hello World");
         TestCache(userAddress, contactPublicKey);
     }, [])
 
