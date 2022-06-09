@@ -1,7 +1,4 @@
-Welcome To Crypto Chat App!
-
-
-## Getting Started
+## Welcome To Crypto Chat App
 
 Simply log on and connect a web3 wallet to start chatting!
 
