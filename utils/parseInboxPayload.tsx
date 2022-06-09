@@ -56,10 +56,6 @@ export const ParseInboxPayload = (payload : any, setUserMessages: any) => {
 
     let _testingTimeSort = await sortByTime(currentInbox, "time");
 
-    console.log("Testin time sort in inbox");
-    console.log(_testingTimeSort);
-
-
     for (let x = 0; x < _testingTimeSort.length; x++) {
       let alias = await localStorage.getItem(_testingTimeSort[x].from);
 

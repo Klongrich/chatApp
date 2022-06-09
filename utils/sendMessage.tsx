@@ -19,7 +19,9 @@ export async function SendMessage(
         return ;
     }
 
-    if (fromAddress = toAddress) {
+    let _toAddress = toAddress.toLowerCase();
+
+    if (fromAddress == _toAddress) {
         alert("User Can't send messge to self");
         return ;
     }
