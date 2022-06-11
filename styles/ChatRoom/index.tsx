@@ -23,6 +23,8 @@ export const ChatRoomContainer = styled.div`
 
     height: 490px;
 
+    transform: rotate(180deg) scaleX(-1);
+
     overflow: auto;
     bottom: 0;
 `
@@ -58,6 +60,8 @@ export const FromBox = styled.div`
 
     font-size: 12px;
 
+    transform: rotate(180deg) scaleX(-1);
+
     h4 {
         font-size: 10px;
     }
@@ -80,6 +84,8 @@ export const ToBox = styled.div`
     border-radius: 15px;
 
     font-size: 12px;
+
+    transform: rotate(180deg) scaleX(-1);
 
     h4 {
         font-size: 10px;
