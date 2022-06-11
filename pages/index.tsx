@@ -566,9 +566,10 @@ const Home: NextPage = () => {
               {editMessages && <>
               <EditMessageBox>
                 <Menu right styles={burgerStyles} width={'70%'} isOpen={editMessages} onClose={() => setEditMessages(false)}>
-                  <p onClick={() => deleteContact(chatToAddress)}>Delete Messages</p>
-                  <p>Delete Contact</p>
+                  <p onClick={() => deleteContact(chatToAddress)}>Delete Contact</p>
                   <p>Edit Contact</p>
+
+                  {/* <p>Delete Messages</p> */}
                 </Menu>
               </EditMessageBox>
               </>}
