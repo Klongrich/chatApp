@@ -29,6 +29,7 @@ import { ThreeDotsVertical } from "@styled-icons/bootstrap/ThreeDotsVertical";
 
 import { slide as Menu } from 'react-burger-menu'
 import { deleteField } from '@firebase/firestore';
+import { ChatRoomContainerDesktop } from '../styles/ChatRoom';
 
 const FirebaseConfig = {
   apiKey: process.env.API_KEY,
@@ -142,7 +143,7 @@ const LogInBox = styled.div`
   color: white;
 
   text-align: center;
-  height: 1000px;
+  height: 100vh;
   margin-top: -20px;
 
   padding-top: 150px;
@@ -448,9 +449,7 @@ const Home: NextPage = () => {
     let _data = docSnap.data();
 
     if (_data) {
-
       console.log(_data);
-
       for (let e = 0; e < 10; e++) {
         console.log(_data[e]);
         if (_data[e] == addressToDelete) {
@@ -458,7 +457,6 @@ const Home: NextPage = () => {
           _data[e] = "Free"
         }
       }
-
       await setDoc(docRef, _data);
       console.log("Updated Doc");
       setNewContact(false);
@@ -467,8 +465,7 @@ const Home: NextPage = () => {
     }
   }
 
-  return (
-    <div className={styles.container}>
+  return (<>
       <Head>
         <title>Crypto Chat</title>
         <meta name="description" content="Next Generation Chat App!" />
@@ -501,7 +498,6 @@ const Home: NextPage = () => {
           </>}
 
         </>}
-
         {!newMessage && <>
           {!chatRoom && <>
             <HeaderBox>
@@ -585,8 +581,7 @@ const Home: NextPage = () => {
           </>}
         </>}
       </>}
-    </div>
-  )
+  </>)
 }
 
 export default Home

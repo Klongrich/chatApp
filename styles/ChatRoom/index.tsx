@@ -144,7 +144,7 @@ export const InputBoxContainerMobile = styled.div`
     padding-top: 20px;
     color: white;
     text-align: center;
-    height: 100vh;
+    height: 200px;
 `
 
 export const InputBoxContainerDesktop= styled.div`
@@ -161,6 +161,8 @@ export const SendPlaneContainerMobile = styled.div`
     padding-right: 32px;
     padding-top: 5px;
     margin-top: -81px;
+    background-color: black;
+    height: 100%;
 `
 
 export const SendPlaneContainerDesktop = styled.div`
