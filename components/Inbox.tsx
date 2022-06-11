@@ -312,7 +312,7 @@ export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
         </>}
         {!isMessaging && <>
             {userMessages.map((data) => <>
-                {data.time != null && data.from != userAddress && <>
+                {data.time != null && data.from != userAddress && data.from != "Free" && <>
                     <ContactBox onClick={() => updateToChatRoom(data.from, userAddress, data.alias)}>
                         <ProfilePicBox />
                         {data.alias && <>

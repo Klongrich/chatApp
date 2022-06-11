@@ -8,7 +8,7 @@ import {useEffect, useState, useCallback, useReducer} from "react";
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously } from "firebase/auth";
 import { getDatabase } from "firebase/database";
-import { addDoc, collection, getFirestore, doc, setDoc, getDoc } from "firebase/firestore/lite";
+import { addDoc, collection, getFirestore, doc, setDoc, getDoc, updateDoc } from "firebase/firestore/lite";
 
 import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
@@ -28,6 +28,7 @@ import { Add } from "@styled-icons/fluentui-system-filled/Add";
 import { ThreeDotsVertical } from "@styled-icons/bootstrap/ThreeDotsVertical";
 
 import { slide as Menu } from 'react-burger-menu'
+import { deleteField } from '@firebase/firestore';
 
 const FirebaseConfig = {
   apiKey: process.env.API_KEY,
@@ -439,6 +440,33 @@ const Home: NextPage = () => {
     setToAlias(toAlias);
   }
 
+  async function deleteContact(addressToDelete : string) {
+    //@ts-ignore
+    const docRef = doc(db, address, "Inbox");
+    const docSnap = await getDoc(docRef);
+
+    let _data = docSnap.data();
+
+    if (_data) {
+
+      console.log(_data);
+
+      for (let e = 0; e < 10; e++) {
+        console.log(_data[e]);
+        if (_data[e] == addressToDelete) {
+          console.log("Found Address");
+          _data[e] = "Free"
+        }
+      }
+
+      await setDoc(docRef, _data);
+      console.log("Updated Doc");
+      setNewContact(false);
+      setEditMessages(false);
+      setChatRoom(false);
+    }
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -538,7 +566,7 @@ const Home: NextPage = () => {
               {editMessages && <>
               <EditMessageBox>
                 <Menu right styles={burgerStyles} width={'70%'} isOpen={editMessages} onClose={() => setEditMessages(false)}>
-                  <p>Delete Messages</p>
+                  <p onClick={() => deleteContact(chatToAddress)}>Delete Messages</p>
                   <p>Delete Contact</p>
                   <p>Edit Contact</p>
                 </Menu>
