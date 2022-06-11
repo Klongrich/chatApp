@@ -43,7 +43,7 @@ const LatestMessageBox = styled.div`
 const ContactBox = styled.div`
     text-align: left;
 
-    margin-top: -30px;
+    margin-top: -10px;
     padding-left: 10px;
 
     h4 {
@@ -63,11 +63,20 @@ const ContactBox = styled.div`
     }
 `
 
+const TimeStampBox = styled.div`
+    text-align: right;
+    padding-right: 27px;
+    margin-top: -82px;
+
+    color: #a3a3a3;
+`
+
 export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
 
     const [userMessages, setUserMessages] = useState([{from: "", message: "", alias: "", time: ""}]);
     const [isMessaging, setIsMessaging] = useState(false);
     const [toAddress, setToAddress] = useState("");
+    const [currentTime, setCurrentTime] = useState(0);
 
     function checkLatestMessageLength(Message : string) {
         if (Message != undefined) {
@@ -155,7 +164,7 @@ export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
     interface MessageObject {
         from : string;
         message : string | undefined;
-        time : number | undefined;
+        time : number | string | undefined;
         alias: string;
     }
 
@@ -249,6 +258,8 @@ export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
             //So this is the next best thing. its not optmial though as I have to have one database call
             //make another database call rather than just having a singluar database connected to trigger
             //the call. Kind of sucks but it is what it is.
+            const currentTime = await new Date().getTime();
+            setCurrentTime(currentTime);
             await onValue(listining, (snapshot) => {
                 const data = snapshot.val();
 
@@ -258,6 +269,36 @@ export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
         }
         listenForInbox();
     }, [])
+
+    function convertFromUnixTime(unix_timestamp : number) {
+        var date = new Date(unix_timestamp);
+        let diff = currentTime - (unix_timestamp);
+
+        // console.log("Unix_Timestamp: " + unix_timestamp);
+        // console.log("Current Time: " + currentTime);
+        // console.log("diff: " + diff);
+
+        if (diff < 86400000) {
+            let hours = date.getHours();
+            let minutes = date.getMinutes();
+            const ampm = hours >= 12 ? 'pm' : 'am';
+
+            hours %= 12;
+            hours = hours || 12;
+            //@ts-ignore
+            minutes = minutes < 10 ? `0${minutes}` : minutes;
+
+            const strTime = `${hours}:${minutes} ${ampm}`;
+
+            return (strTime);
+        }
+
+        if (diff > 86400000) {
+            let fullDate = date.toString();
+            let _res = fullDate.substring(4,11);
+            return (_res);
+        }
+    }
 
     return (
     <>
@@ -274,7 +315,6 @@ export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
                 {data.time != null && data.from != userAddress && <>
                     <ContactBox onClick={() => updateToChatRoom(data.from, userAddress, data.alias)}>
                         <ProfilePicBox />
-
                         {data.alias && <>
                             <h4> <strong> {data.alias} </strong> </h4>
                         </>}
@@ -287,6 +327,10 @@ export const Inbox = ({userAddress, database, updateToChatRoom, db} : any) => {
                             <p> {checkLatestMessageLength(data.message)} </p>
                         </LatestMessageBox>
                     </ContactBox>
+
+                    <TimeStampBox>
+                        <h5> {convertFromUnixTime(parseInt(data.time))}</h5>
+                    </TimeStampBox>
                     <br /> <br />
                 </>}
             </>)}
