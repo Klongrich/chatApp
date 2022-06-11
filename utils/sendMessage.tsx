@@ -3,6 +3,9 @@ import { writeData } from "./writeData";
 import { updateCurrentMessageTo } from "./updateCurrentMessageTo";
 import { updateCurrentMessageFrom } from "./updateCurrentMessageFrom";
 
+import { updateInboxTo } from "../utils/inbox/updateInboxTo";
+import { updateInboxFrom } from "../utils/inbox/updateInboxFrom";
+
 export async function SendMessage(
     fromAddress : any,
     toAddress : any,
@@ -31,6 +34,9 @@ export async function SendMessage(
 
     await updateCurrentMessageTo(fromAddress, toAddress, message);
     await updateCurrentMessageFrom(fromAddress, toAddress, message);
+
+    await updateInboxTo(fromAddress, toAddress, message);
+    await updateInboxFrom(fromAddress, toAddress, message);
 
     if (updateToChatRoom != null && setNewMessage != null) {
         updateToChatRoom(toAddress, fromAddress);

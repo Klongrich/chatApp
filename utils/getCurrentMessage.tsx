@@ -5,7 +5,10 @@ export async function GetCurrentMessage(fromAddress : string, toAddress : string
 
     let currentMessage;
 
-    await get(child(dbRef, `messages/` + fromAddress + `/current/` + toAddress)).then((snapshot) => {
+    console.log(toAddress);
+    console.log(fromAddress);
+
+    await get(child(dbRef, `messages/` + fromAddress + `/current/` + toAddress.toLowerCase())).then((snapshot) => {
       if (snapshot.exists()) {
         let data = snapshot.val();
         currentMessage = data;

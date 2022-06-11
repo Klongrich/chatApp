@@ -2,7 +2,9 @@ import React, { useState} from "react";
 import styled from "styled-components";
 
 import { SendPlane } from "@styled-icons/remix-fill/SendPlane"
-import { SendMessage } from "../utils/sendMessage";
+import { SendNewMessage } from "../utils/sendNewMessage";
+
+import { doc, setDoc, getDoc } from "firebase/firestore/lite";
 
 const NewMessageBox = styled.div`
     background-color: black;
@@ -70,7 +72,7 @@ const SendPlaneContainer = styled.div`
     padding-right: 55px;
 `
 
-export const NewMessageScreen = ({userAddress, updateToChatRoom, setNewMessage} : any) => {
+export const NewMessageScreen = ({userAddress, updateToChatRoom, setNewMessage, db} : any) => {
 
     const [toAddress, setToAddress] = useState("");
     const [message, setMessage] = useState("Enter Message");
@@ -87,13 +89,14 @@ export const NewMessageScreen = ({userAddress, updateToChatRoom, setNewMessage} 
                 <br /> <br /> <br />
 
                 <SendPlaneContainer>
-                    <SendPlane size={40} color="white" onClick={() => SendMessage(
+                    <SendPlane size={40} color="white" onClick={() => SendNewMessage(
                          userAddress,
-                         toAddress,
+                         toAddress.toLowerCase(),
                          message,
                          updateToChatRoom,
                          setNewMessage,
-                         setMessage
+                         setMessage,
+                         db
                         )}
                     />
                 </SendPlaneContainer>

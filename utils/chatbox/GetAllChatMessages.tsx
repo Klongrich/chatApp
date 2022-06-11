@@ -69,6 +69,8 @@ export async function GetAllChatMessages(toAddress : any , fromAddress : any) {
 
       sortedArray = await sortByTime(result, "time");
 
+      //console.log(sortedArray);
+
       return (sortedArray.reverse());
     }
 }

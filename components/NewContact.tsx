@@ -111,7 +111,7 @@ export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, up
 
     const [alias, setAlias] = useState("Alais");
     const [email, setEmail] = useState("Email");
-    const [name, setName] = useState("Public Key");
+    const [name, setName] = useState(userAddress);
     const [phoneNumber, setPhoneNumber] = useState("Phone Number");
 
     const [image, setImage] = useState("");
@@ -124,13 +124,10 @@ export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, up
         let emailKey = Key + "email"
         let phoneNumberKey = Key + "phoneNumber"
 
-
         await localStorage.setItem(Key, docData.publicKey);
         await localStorage.setItem(aliasKey, docData.alias);
         await localStorage.setItem(emailKey, docData.email);
         await localStorage.setItem(phoneNumberKey, docData.phoneNumber);
-
-        await localStorage.setItem(contactKey, contactKey + ":" + docData.alias);
 
         setAlias(docData.alias);
         setName(docData.publicKey);

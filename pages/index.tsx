@@ -465,7 +465,11 @@ const Home: NextPage = () => {
           </NewMessageArrowBox>
 
           {address && <>
-            <NewMessageScreen userAddress={address} updateToChatRoom={updateToChatRoom} setNewMessage={setNewMessage} />
+            <NewMessageScreen userAddress={address}
+                              updateToChatRoom={updateToChatRoom}
+                              setNewMessage={setNewMessage}
+                              db={db}
+                              />
           </>}
 
         </>}

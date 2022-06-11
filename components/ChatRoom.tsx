@@ -252,13 +252,13 @@ export const ChatRoom = ({fromAddress, toAddress, toAlias, database} : any ) => 
             <ChatRoomContainerDesktop>
                 {chatMessages.map((data) =>
                     <>
-                        {data.time != null && <>
-                            {data.from != fromAddress && <>
+                        {data.time != null && data.from != '' && <>
+                            {data.from.toLowerCase() != fromAddress.toLowerCase() && <>
                                 <FromBox>
                                     <p> {data.message} </p>
                                 </FromBox>
                             </>}
-                            {data.from != toAddress && <>
+                            {data.from.toLowerCase() != toAddress.toLowerCase() && <>
                                 <ToBox>
                                     <p> {data.message} </p>
                                 </ToBox>
@@ -294,12 +294,12 @@ export const ChatRoom = ({fromAddress, toAddress, toAlias, database} : any ) => 
                 {chatMessages.map((data) =>
                     <>
                         {data.time != null && <>
-                            {data.from != fromAddress && <>
+                            {data.from.toLowerCase() != fromAddress.toLowerCase() && <>
                                 <FromBox>
                                     <p> {data.message} </p>
                                 </FromBox>
                             </>}
-                            {data.from != toAddress && <>
+                            {data.from.toLowerCase() != toAddress.toLowerCase() && <>
                                 <ToBox>
                                     <p> {data.message} </p>
                                 </ToBox>
