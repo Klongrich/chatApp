@@ -474,11 +474,18 @@ const Home: NextPage = () => {
     console.log("Document written with ID: ", docRef.id);
   }
 
-  function updateToChatRoom(toAddress: string, fromAddress: string, toAlias: string ) {
+  function updateToChatRoom(toAddress: string, fromAddress: string, toAlias: string, hotFixx : boolean) {
     setChatRoom(true);
     setChatToAddress(toAddress);
     setChatFromAddress(fromAddress);
     setToAlias(toAlias);
+
+    //console.log(address);
+    if (hotFixx) {
+      if (address) {
+        getInboxMessages(address);
+      }
+    }
   }
 
   async function deleteContact(addressToDelete : string) {

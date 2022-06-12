@@ -5,13 +5,6 @@ import { cutUserAddress } from "../utils/strings/cutUserAddress";
 import { ChatRoom }  from "./ChatRoom";
 import { ArrowBack } from "@styled-icons/boxicons-regular/ArrowBack";
 
-import { getImageSize } from "next/dist/server/image-optimizer";
-
-import { ref, onValue, getDatabase, get, child } from "firebase/database";
-
-import { checkUserInboxDB } from "../utils/inbox/updateUserDB";
-
-
 const Container = styled.div`
     background-color: black;
     color: white;
@@ -63,6 +56,10 @@ const ContactBox = styled.div`
 
         font-size: 12px;
         color: #a3a3a3;
+    }
+
+    :hover {
+        cursor : pointer;
     }
 `
 
@@ -146,7 +143,7 @@ export const Inbox = ({userAddress, database, updateToChatRoom, db, userInboxMes
         {!isMessaging && <>
             {userInboxMessages.map((data : any) => <>
                 {data.time != null && data.from != userAddress && data.from != "Free" && <>
-                    <ContactBox onClick={() => updateToChatRoom(data.from, userAddress, data.alias)}>
+                    <ContactBox onClick={() => updateToChatRoom(data.from, userAddress, data.alias, false)}>
                         <ProfilePicBox />
                         {data.alias && <>
                             <h4> <strong> {data.alias} </strong> </h4>

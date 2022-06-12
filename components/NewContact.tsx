@@ -154,7 +154,7 @@ export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, up
         await setDoc(contactsRef, { contactPublicKey : contactPublicKey}, {merge : true});
 
         setNewContact(false);
-        updateToChatRoom(contactPublicKey, userAddress, alias);
+        updateToChatRoom(contactPublicKey, userAddress, alias, true);
     }
 
     async function uploadProfileImage() {

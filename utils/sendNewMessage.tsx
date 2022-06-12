@@ -23,7 +23,6 @@ export async function SendNewMessage(
         let docData = docSnap.data();
         for (let e = 0; e < 11; e++) {
             if (docData[e]){
-                console.log(docData[e]);
                 if (docData[e] == toAddress) {
                     await SendMessage(userAddress, toAddress, message, updateToChatRoom, setNewMessage, setMessage);
                     return ;
@@ -45,7 +44,6 @@ export async function SendNewMessage(
         }
         alert("Your Over Your Contact Limit - Plz Remove a Contact")
     } else {
-        console.log("First Message Sent or Recived from this Account!");
         let _data = {
             0 : toAddress
         }

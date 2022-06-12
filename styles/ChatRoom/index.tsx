@@ -38,6 +38,8 @@ export const ChatRoomContainerDesktop = styled.div`
 
     height: 720px;
 
+    transform: rotate(180deg) scaleX(-1);
+
     overflow: auto;
     bottom: 0;
 

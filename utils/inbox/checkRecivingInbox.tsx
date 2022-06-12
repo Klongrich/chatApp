@@ -14,11 +14,7 @@ export async function checkRecivingInbox(toAddress : string, fromAddress : strin
     if (docSnap.exists()) {
         let docData = docSnap.data();
 
-        console.log('---DocDat---');
-        console.log(docData);
-
         if (docData[0]) {
-            console.log(docData[0]);
             if(docData[0] == fromAddress) {
                 console.log("Address Already Found (0) - Recived Inbox!");
                 return ;
@@ -33,7 +29,6 @@ export async function checkRecivingInbox(toAddress : string, fromAddress : strin
         }
 
         if (docData[1]) {
-            console.log(docData[1]);
             if(docData[1] == fromAddress) {
                 console.log("Address Already Found (1) - Recived Inbox!");
                 return ;
@@ -49,7 +44,6 @@ export async function checkRecivingInbox(toAddress : string, fromAddress : strin
         }
 
         if (docData[2]) {
-            console.log(docData[2]);
             if(docData[2] == fromAddress) {
                 console.log("Address Already Found (2) - Recived Inbox!");
                 return ;
@@ -66,7 +60,6 @@ export async function checkRecivingInbox(toAddress : string, fromAddress : strin
         }
 
         if (docData[3]) {
-            console.log(docData[3]);
             if(docData[3] == fromAddress) {
                 console.log("Address Already Found (3) - Recived Inbox!");
                 return ;
@@ -84,7 +77,6 @@ export async function checkRecivingInbox(toAddress : string, fromAddress : strin
         }
 
         if (docData[4]) {
-            console.log(docData[4]);
             if(docData[4] == fromAddress) {
                 console.log("Address Already Found (4) - Recived Inbox!");
                 return ;
@@ -103,7 +95,6 @@ export async function checkRecivingInbox(toAddress : string, fromAddress : strin
         }
 
         if (docData[5]) {
-            console.log(docData[5]);
             if(docData[3] == fromAddress) {
                 console.log("Address Already Found (5) - Recived Inbox!");
                 return ;
@@ -123,7 +114,6 @@ export async function checkRecivingInbox(toAddress : string, fromAddress : strin
         }
 
         if (docData[6]) {
-            console.log(docData[6]);
             if(docData[6] == fromAddress) {
                 console.log("Address Already Found (6) - Recived Inbox!");
                 return ;
@@ -144,7 +134,6 @@ export async function checkRecivingInbox(toAddress : string, fromAddress : strin
         }
 
         if (docData[7]) {
-            console.log(docData[7]);
             if(docData[7] == fromAddress) {
                 console.log("Address Already Found (7) - Recived Inbox!");
                 return ;
@@ -166,7 +155,6 @@ export async function checkRecivingInbox(toAddress : string, fromAddress : strin
         }
 
         if (docData[8]) {
-            console.log(docData[8]);
             if(docData[6] == fromAddress) {
                 console.log("Address Already Found (8) - Recived Inbox!");
                 return ;
@@ -189,7 +177,6 @@ export async function checkRecivingInbox(toAddress : string, fromAddress : strin
         }
 
         if (docData[9]) {
-            console.log(docData[9]);
             if(docData[9] == fromAddress) {
                 console.log("Address Already Found (9) - Recived Inbox!");
                 return ;
@@ -213,7 +200,6 @@ export async function checkRecivingInbox(toAddress : string, fromAddress : strin
         }
 
         if (docData[10]) {
-            console.log(docData[10]);
             if(docData[10] == fromAddress) {
                 console.log("Address Already Found (10) - Recived Inbox!");
                 return ;
@@ -239,12 +225,10 @@ export async function checkRecivingInbox(toAddress : string, fromAddress : strin
 
     if (docData[11]) {
         alert("User contact list is Full");
-        console.log("Reciving Users Contact List is Full!");
-        return ;
+        return;
     }
 
     } else {
-        console.log("No Contact List Found by Reciving User!");
         let _data = {
             0 : __from
         }
