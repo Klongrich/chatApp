@@ -1,6 +1,5 @@
 import { getDatabase, ref, set} from "firebase/database";
 
-
 async function setUpdateInboxFromMessage(message : string, toAddress : string, userAddress: string) {
     const database = getDatabase();
     await set(ref(database, 'messages/' + userAddress.toLowerCase() + '/Inbox/'+ toAddress.toLowerCase() + '/message'), {

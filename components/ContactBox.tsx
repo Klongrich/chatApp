@@ -79,13 +79,16 @@ export const ContactBox = ({userAddress , db, updateToChatRoom} : any) => {
             if (userCache[x].includes("0x")) {
                 //@ts-ignore
                 let _temp = userCache[x].split(":");
-
                 if (_temp[1]) {
-                    let _userContacts = {
-                        alias : _temp[1].trim(),
-                        publicKey : _temp[0].trim()
+                    let userPublicKey = _temp[0].trim();
+
+                    if (userPublicKey.length == 42) {
+                        let _userContacts = {
+                            alias : _temp[1].trim(),
+                            publicKey : _temp[0].trim()
+                        }
+                        cachedContent.push(_userContacts);
                     }
-                    cachedContent.push(_userContacts);
                 }
             }
         }
@@ -98,7 +101,7 @@ export const ContactBox = ({userAddress , db, updateToChatRoom} : any) => {
                 <Container>
                 {allContactsInfo.map((data : any) =>
                     <>
-                        {data.publicKey != "" && data.alias != "true,\"accounts\"" && <>
+                        {data.publicKey != "" && data.alias != "true,\"accounts\"" && <> 
                         <ContactContaier onClick={() => updateToChatRoom(data.publicKey, userAddress, data.alias)}>
                             <ProfilePicBox />
                             <h4> <strong> {data.alias} </strong> </h4>

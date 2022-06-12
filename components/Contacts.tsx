@@ -27,7 +27,7 @@ export default function Contacts({txsData} : any) {
             <h2> Recent Transcations From Address </h2>
             {txsData.map((data : any) =>
                 <>
-                {data.address != "" &&
+                {data.address != "" && !data.address.include("\"") &&
                 <>
                     <p> Contact: {data.address.substring(0,7) + "...." + data.address.substring(32, 42)} </p>
                     <p> blockNumber: {data.blocknumber} </p> <br/>

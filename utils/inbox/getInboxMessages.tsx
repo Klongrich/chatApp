@@ -12,7 +12,6 @@ export async function getInboxMessages(fromAddress : string) {
 
         console.log("--Inbox Data--");
         console.log(_parse.Incoming);
-        
 
       } else {
         console.log("No data available");

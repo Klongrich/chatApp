@@ -7,8 +7,9 @@ import {useEffect, useState, useCallback, useReducer} from "react";
 
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously } from "firebase/auth";
-import { getDatabase } from "firebase/database";
 import { addDoc, collection, getFirestore, doc, setDoc, getDoc, updateDoc } from "firebase/firestore/lite";
+
+import { ref, onValue, getDatabase, get, child } from "firebase/database";
 
 import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
@@ -30,6 +31,8 @@ import { ThreeDotsVertical } from "@styled-icons/bootstrap/ThreeDotsVertical";
 import { slide as Menu } from 'react-burger-menu'
 import { deleteField } from '@firebase/firestore';
 import { ChatRoomContainerDesktop } from '../styles/ChatRoom';
+
+import { checkUserInboxDB } from "../utils/inbox/updateUserDB";
 
 const FirebaseConfig = {
   apiKey: process.env.API_KEY,
@@ -311,6 +314,13 @@ function reducer(state: StateType, action: ActionType): StateType {
   }
 }
 
+interface MessageObject {
+  from : string;
+  message : string | undefined;
+  time : number | string | undefined;
+  alias: string;
+}
+
 const Home: NextPage = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -328,9 +338,35 @@ const Home: NextPage = () => {
   const [chatFromAddress, setChatFromAddress] = useState("");
 
   const [toAlias, setToAlias] = useState("");
+  const [currentTime, setCurrentTime] = useState(0);
 
   //Hot fix for rendering shit in typescript / next
   const [txsData, setTxsData] = useState([{blocknumber : "", address: ""}]);
+
+  const [userInboxMessages, setUserInboxMessages] = useState([{from : "", message : "", time : 0, alias : ""}])
+
+  async function getInboxMessages(address : string) {
+    //@ts-ignore
+    let _userMessages = await checkUserInboxDB(address, db);
+    //@ts-ignore
+    setUserInboxMessages(_userMessages);
+  }
+
+  async function listenForInbox(address : string) {
+    const listining = ref(database, 'messages/' + address.toLowerCase() + '/Inbox');
+    //This function should be listening for an update to firebase instead of realtime database however
+    //firebase update listening in nextjs and typescirpt dosen't work right now for me
+    //So this is the next best thing. its not optmial though as I have to have one database call
+    //make another database call rather than just having a singluar database connected to trigger
+    //the call. Kind of sucks but it is what it is.
+    const currentTime = await new Date().getTime();
+    setCurrentTime(currentTime);
+    await onValue(listining, (snapshot) => {
+        if (address) {
+          getInboxMessages(address);
+        }
+  });
+}
 
   const connect = useCallback(async function () {
     // This is the initial `provider` that is returned when
@@ -343,7 +379,10 @@ const Home: NextPage = () => {
     const web3Provider = new providers.Web3Provider(provider)
 
     const signer = web3Provider.getSigner()
-    const address = await (await signer.getAddress()).toLowerCase()
+    const address = await (await signer.getAddress()).toLowerCase();
+
+    //Call To check User Firestore here instead.
+    await listenForInbox(address);
 
     const cutUserAddress = await address.substring(0, 5) + "...." + address.substring(address.length - 5, address.length)
     setCutUserAddress(cutUserAddress);
@@ -379,6 +418,7 @@ const Home: NextPage = () => {
     },
     [provider, loggedIn]
   )
+
 
   // Auto connect to the cached provider
   useEffect(() => {
@@ -449,21 +489,23 @@ const Home: NextPage = () => {
     let _data = docSnap.data();
 
     if (_data) {
-      console.log(_data);
       for (let e = 0; e < 10; e++) {
-        console.log(_data[e]);
         if (_data[e] == addressToDelete) {
-          console.log("Found Address");
           _data[e] = "Free"
         }
       }
       await setDoc(docRef, _data);
-      console.log("Updated Doc");
       setNewContact(false);
       setEditMessages(false);
       setChatRoom(false);
     }
   }
+
+  useEffect(() => {
+    if (address) {
+      getInboxMessages(address);
+    }
+  }, [])
 
   return (<>
       <Head>
@@ -517,6 +559,7 @@ const Home: NextPage = () => {
                     database={database}
                     updateToChatRoom={updateToChatRoom}
                     db={db}
+                    userInboxMessages={userInboxMessages}
               />
               <NewMessageBox>
                 <Message size={40} color="white" onClick={() => setNewMessage(true)} />
@@ -564,8 +607,6 @@ const Home: NextPage = () => {
                 <Menu right styles={burgerStyles} width={'70%'} isOpen={editMessages} onClose={() => setEditMessages(false)}>
                   <p onClick={() => deleteContact(chatToAddress)}>Delete Contact</p>
                   <p>Edit Contact</p>
-
-                  {/* <p>Delete Messages</p> */}
                 </Menu>
               </EditMessageBox>
               </>}

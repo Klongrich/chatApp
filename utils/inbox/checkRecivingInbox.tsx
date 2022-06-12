@@ -23,6 +23,13 @@ export async function checkRecivingInbox(toAddress : string, fromAddress : strin
                 console.log("Address Already Found (0) - Recived Inbox!");
                 return ;
             }
+
+            if (docData[0] == "Free") {
+                console.log("Free Slot Found! (2) Updating contact llist");
+                docData[0] = fromAddress;
+                await setDoc(docRef, docData);
+                return;
+            }
         }
 
         if (docData[1]) {
