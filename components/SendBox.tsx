@@ -1,23 +1,8 @@
-
 import React, {useState} from 'react';
-import styled from 'styled-components';
 
 import { writeData } from "../utils/writeData";
 
-const Container = styled.div`
-    background-color: blue;
-    height: 300px;
-    width: 100%;
-    border: 1px solid black;
-
-    text-align: center;
-`
-const InputAddress = styled.input`
-  width: 98%;
-  height: 30px;
-
-  text-align:center;
-`
+import { Container, InputAddress } from "../styles/SendBox";
 
 export default function SendBox({userAddress} : any) {
 

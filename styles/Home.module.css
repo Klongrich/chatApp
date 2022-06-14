@@ -2,6 +2,32 @@
   padding: 0 0rem;
 }
 
+.timeWaste {
+  background-color: black;
+  color: white;
+  text-align: center;
+  height: 100vh;
+  margin-top: -20px;
+  padding-top: 150px;
+}
+
+.timeWaste h2 {
+  padding-bottom: 20px;
+  font-size: 28px;
+}
+
+.timeWaste h3 {
+  padding-bottom: 20px;
+  font-size: 22px;
+}
+
+.timeWaste button {
+  width: 220px;
+  height: 32px;
+  padding: 2px;
+  margin-bottom: 20px;
+}
+
 .main {
   min-height: 100vh;
   padding: 40rem 0;

@@ -1,75 +1,15 @@
 import React, {useState, useEffect} from "react";
-import styled from "styled-components";
 
 import { cutUserAddress } from "../utils/strings/cutUserAddress";
 import { ChatRoom }  from "./ChatRoom";
 import { ArrowBack } from "@styled-icons/boxicons-regular/ArrowBack";
 
-const Container = styled.div`
-    background-color: black;
-    color: white;
-
-    height: 100vh;
-    padding-top: 20px;
-    width: 100%;
-    border: 1px solid black;
-
-    margin-top: -35px;
-    margin-bottom: 25px;
-
-    overflow: auto;
-`
-
-const ProfilePicBox = styled.div`
-    border-radius: 100%;
-    background-color: #d8d8d8;
-
-    height: 38px;
-    width: 38px;
-
-    margin-top: 20px;
-    margin-left: 5px;
-    margin-bottom: -65px;
-`
-
-const LatestMessageBox = styled.div`
-    height: 40px;
-`
-
-const ContactBox = styled.div`
-    text-align: left;
-
-    margin-top: -10px;
-    padding-left: 10px;
-
-    h4 {
-        padding-left: 60px;
-        padding-top: 2px;
-        font-size: 18px;
-        color: #fdfdfd;
-    }
-
-    p {
-        padding-left: 60px;
-        padding-right: 28px;
-        margin-top: -22px;
-
-        font-size: 12px;
-        color: #a3a3a3;
-    }
-
-    :hover {
-        cursor : pointer;
-    }
-`
-
-const TimeStampBox = styled.div`
-    text-align: right;
-    padding-right: 27px;
-    margin-top: -82px;
-
-    color: #a3a3a3;
-`
+import { Container,
+         ProfilePicBox,
+         LatestMessageBox,
+         ContactBox,
+         TimeStampBox
+} from "../styles/Inbox";
 
 export const Inbox = ({userAddress, database, updateToChatRoom, db, userInboxMessages} : any) => {
 
@@ -92,10 +32,6 @@ export const Inbox = ({userAddress, database, updateToChatRoom, db, userInboxMes
     function convertFromUnixTime(unix_timestamp : number) {
         var date = new Date(unix_timestamp);
         let diff = currentTime - (unix_timestamp);
-
-        // console.log("Unix_Timestamp: " + unix_timestamp);
-        // console.log("Current Time: " + currentTime);
-        // console.log("diff: " + diff);
 
         if (diff < 86400000) {
             let hours = date.getHours();

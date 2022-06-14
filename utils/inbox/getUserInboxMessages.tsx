@@ -15,7 +15,7 @@ async function getMessage(from : string, to : string) : Promise<string | undefin
             let data = snapshot.val();
             message = data.message;
           } else {
-            console.log("No data available");
+            //console.log("No data available");
           }
     }).catch((error) => {
         console.error(error);
@@ -31,15 +31,12 @@ async function getTime(from : string, to : string) : Promise<number | undefined>
 
     time = 0;
 
-    // console.log("to: " + to.toLowerCase());
-    // console.log("from: " + from.toLowerCase())
-
     await get(child(dbRef, `messages/` + from.toLowerCase() + '/Inbox/' + to.toLowerCase() + '/time' )).then((snapshot) => {
         if (snapshot.exists()) {
             let data = snapshot.val();
             time = data.time;
           } else {
-            console.log("No data available");
+            //console.log("No data available");
           }
     }).catch((error) => {
         console.error(error);
@@ -63,10 +60,10 @@ async function getInboxMessage(from : string, to : string) {
    if (timeX != undefined && timeY != undefined) {
        if (timeX > timeY) {
             message = await getMessage(from, to);
-            time = await getTime(from, to);
+            time = timeX;
        } else {
             message = await getMessage(to, from);
-            time = await getTime(to, from);
+            time = timeY;
        }
    }
 
@@ -86,7 +83,7 @@ interface MessageObject {
     alias: string;
 }
 
-export async function checkUserInboxDB(userAddress : string, db : any) {
+export async function getUserInboxMessages(userAddress : string, db : any) {
     const docRef = doc(db, userAddress, "Inbox");
     const docSnap = await getDoc(docRef);
 

@@ -1,7 +1,9 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
 import styled from 'styled-components';
+
+import Head from 'next/head'
+
+import styles from  "../styles/Home.module.css";
 
 import {useEffect, useState, useCallback, useReducer} from "react";
 
@@ -15,7 +17,6 @@ import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { providers } from 'ethers';
 
-import { GetUserTransactions } from "../utils/getUserTransacitons";
 import { Inbox } from "../components/Inbox";
 import { ContactBox } from "../components/ContactBox";
 import { NewContact } from "../components/NewContact";
@@ -32,17 +33,32 @@ import { slide as Menu } from 'react-burger-menu'
 import { deleteField } from '@firebase/firestore';
 import { ChatRoomContainerDesktop } from '../styles/ChatRoom';
 
-import { checkUserInboxDB } from "../utils/inbox/updateUserDB";
+import { getUserInboxMessages}  from "../utils/inbox/getUserInboxMessages";
+import { burgerStyles } from "../static/burgerMenuStyles";
+import { FirebaseConfig } from "../static/firbaseConfig";
 
-const FirebaseConfig = {
-  apiKey: process.env.API_KEY,
-  authDomain: process.env.AUTH_DOMAIN,
-  databaseURL: process.env.DATABASE_URL,
-  projectId: process.env.PROJECT_ID,
-  storageBucket: process.env.STORAGE_BUCKET,
-  messagingSenderId: process.env.MESSAGING_SENDER_ID,
-  appId: process.env.APP_ID
-};
+import { HeaderBox,
+        NewMessageBox,
+        LogOutArrow,
+        NewMessageArrowBox,
+        BackArrowBox,
+        AddContactBox,
+        NewContactBackArrowBox,
+        AddContactButton,
+        EditMessageBox,
+        ContainerBox
+} from "../styles/pages";
+
+// import { MetaBox } from "../components/MetaBox";
+
+//Used to get all ERC20 or E721 Token Meta of any address
+
+//Uses Etherscans API calls to return all ERC20 or ERC721 Token Transfer Events
+//Then connects to a Infura-Node to create a web3js instance to pull external meta.
+import { GetUserTokenMeta } from "../utils/eth/getUserTokenMeta";
+
+//Test
+import { ExampleTest } from "../test/getUserTokenMetaExampleTest";
 
 // Initialize Firebase
 const app = initializeApp(FirebaseConfig);
@@ -103,190 +119,6 @@ const initialState: StateType = {
   chainId: 0x4,
 }
 
-const HeaderBox = styled.div`
-  color: white;
-  background-color: black;
-
-  font-family: SanFransico;
-
-  margin-top: -20px;
-  padding-top: 30px;
-  padding-bottom: 10px;
-
-  h2 {
-    margin-left: 20px;
-    font-size: 28px;
-    margin-bottom: 37px;
-  }
-
-  ul {
-    list-style-type: none;
-    padding-bottom: 20px;
-    margin-bottom: 30px;
-    margin-left: -30px;
-  }
-
-  li {
-    display: inline-block;
-    font-size: 19px;
-    padding-left: 12px;
-    padding-right: 12px;
-
-    color: #d8d8d8;
-
-    :hover {
-      color: blue;
-      cursor: pointer;
-    }
-  }
-`
-
-const LogInBox = styled.div`
-  background-color: black;
-  color: white;
-
-  text-align: center;
-  height: 100vh;
-  margin-top: -20px;
-
-  padding-top: 150px;
-
-  h2 {
-    padding-bottom: 20px;
-    font-size: 28px;
-  }
-
-  h3 {
-    padding-bottom: 20px;
-    font-size: 22px;
-  }
-
-  button {
-    width: 220px;
-    height: 32px;
-    padding: 2px;
-    margin-bottom: 20px;
-  }
-`
-
-const NewMessageBox = styled.div`
-  border-radius: 50%;
-  width: 65px;
-  height: 65px;
-
-  padding-left: 13px;
-  padding-top: 15px;
-
-  background-color: #737373;
-  box-shadow: 0px 4px 4px rgba(255, 255, 255, 0.25);
-
-  margin-top: -410px;
-  margin-left: 70%;
-`
-
-const LogOutArrow = styled.div`
-  text-align: right;
-  padding-top: 30px;
-  padding-right: 32px;
-  margin-bottom: -53px;
-`
-
-const NewMessageArrowBox = styled.div`
-  margin-bottom: -50px;
-  padding-top: 40px;
-  background-color: black;
-  padding-left: 25px;
-`
-
-const BackArrowBox = styled.div`
-  background-color: black;
-  padding-left: 7%;
-
-  padding-top: 30px;
-`
-
-const AddContactBox = styled.div`
-  margin-top: -30px;
-  border: 1px solid black;
-  background-color: black;
-
-  padding-left: 83%;
-
-  margin-bottom: -55px;
-`
-
-const NewContactBackArrowBox = styled.div`
-  border: 1px solid black;
-  background-color: black;
-
-  padding-left: 83%;
-`
-
-const AddContactButton = styled.div`
-  border-radius: 50%;
-  width: 65px;
-  height: 65px;
-
-  padding-left: 13px;
-  padding-top: 15px;
-
-  background-color: #737373;
-  box-shadow: 0px 4px 4px rgba(255, 255, 255, 0.25);
-
-  margin-top: -410px;
-  margin-left: 70%;
-`
-
-const EditMessageBox = styled.div`
-  background-color: yellow;
-`
-
-var burgerStyles = {
-  bmBurgerButton: {
-    position: 'fixed',
-    width: '36px',
-    height: '30px',
-    left: '36px',
-    top: '36px'
-  },
-  bmBurgerBars: {
-    background: 'black'
-  },
-  bmBurgerBarsHover: {
-    background: '#a90000'
-  },
-  bmCrossButton: {
-    height: '24px',
-    width: '24px'
-  },
-  bmCross: {
-    background: '#bdc3c7'
-  },
-  bmMenuWrap: {
-    position: 'fixed',
-    height: '100%'
-  },
-  bmMenu: {
-    background: '#363636',
-    padding: '2.5em 1.5em 0',
-    fontSize: '1.15em',
-    borderRadius: '30px'
-  },
-  bmMorphShape: {
-    fill: '#373a47'
-  },
-  bmItemList: {
-    color: 'white',
-    padding: '0.8em'
-  },
-  bmItem: {
-    display: 'inline-block'
-  },
-  bmOverlay: {
-    background: 'rgba(0, 0, 0, 0.3)'
-  }
-}
-
 function reducer(state: StateType, action: ActionType): StateType {
   switch (action.type) {
     case 'SET_WEB3_PROVIDER':
@@ -313,7 +145,6 @@ function reducer(state: StateType, action: ActionType): StateType {
       throw new Error()
   }
 }
-
 interface MessageObject {
   from : string;
   message : string | undefined;
@@ -321,8 +152,11 @@ interface MessageObject {
   alias: string;
 }
 
+
 const Home: NextPage = () => {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  
   const [state, dispatch] = useReducer(reducer, initialState)
   const { provider, web3Provider, address, chainId } = state
 
@@ -340,14 +174,33 @@ const Home: NextPage = () => {
   const [toAlias, setToAlias] = useState("");
   const [currentTime, setCurrentTime] = useState(0);
 
+  const [displayUserMeta, setDisplayUserMeta] = useState(false);
+
   //Hot fix for rendering shit in typescript / next
   const [txsData, setTxsData] = useState([{blocknumber : "", address: ""}]);
 
   const [userInboxMessages, setUserInboxMessages] = useState([{from : "", message : "", time : 0, alias : ""}])
 
+  const [userERC721, setUserERC721] = useState([{
+    tokenName : "",
+    tokenId : 0,
+    contractAddress : "",
+    tokenSymbol : "",
+    tokenURI : "",
+    image : "",
+  }])
+
+  const [userERC20, setUserERC20] = useState([{
+    tokenName : "",
+    amount : 0
+  }])
+
+  const [ERC20IsLoaded, setERC20IsLoaded] = useState(false);
+  const [ERC721IsLoaded, setERC721IsLoaded] = useState(false);
+
   async function getInboxMessages(address : string) {
     //@ts-ignore
-    let _userMessages = await checkUserInboxDB(address, db);
+    let _userMessages = await getUserInboxMessages(address, db);
     //@ts-ignore
     setUserInboxMessages(_userMessages);
   }
@@ -356,6 +209,7 @@ const Home: NextPage = () => {
     const listining = ref(database, 'messages/' + address.toLowerCase() + '/Inbox');
     //This function should be listening for an update to firebase instead of realtime database however
     //firebase update listening in nextjs and typescirpt dosen't work right now for me
+
     //So this is the next best thing. its not optmial though as I have to have one database call
     //make another database call rather than just having a singluar database connected to trigger
     //the call. Kind of sucks but it is what it is.
@@ -371,7 +225,7 @@ const Home: NextPage = () => {
   const connect = useCallback(async function () {
     // This is the initial `provider` that is returned when
     // using web3Modal to connect. Can be MetaMask or WalletConnect.
-    const provider = await web3Modal.connect()
+    const provider = await web3Modal.connect();
 
     // We plug the initial `provider` into ethers.js and get back
     // a Web3Provider. This will add on methods from ethers.js and
@@ -391,8 +245,8 @@ const Home: NextPage = () => {
 
     //Fecthing recent transcations the users wallet has made
     //Should be moved to Contacts, compnents as a "reccomened" or "recent"
-    let txsDatas = await GetUserTransactions(address);
-    setTxsData(txsDatas);
+
+    //await GetUserTokenMeta("0xEf0ec25bF8931EcA46D2fF785d1A7f3d7Db6F7ab", setUserERC20, setUserERC721, setERC20IsLoaded, setERC721IsLoaded);
 
     dispatch({
       type: 'SET_WEB3_PROVIDER',
@@ -419,13 +273,13 @@ const Home: NextPage = () => {
     [provider, loggedIn]
   )
 
-
   // Auto connect to the cached provider
   useEffect(() => {
     if (web3Modal.cachedProvider) {
       connect()
     }
   }, [connect])
+
 
   // A `provider` should come with EIP-1193 events. We'll listen for those events
   // here so that when a user switches accounts or networks, we can update the
@@ -514,7 +368,36 @@ const Home: NextPage = () => {
     }
   }, [])
 
-  return (<>
+  async function getMetaData(){
+    setNewContact(false);
+    setChatRoom(false);
+    setNewMessage(false);
+
+    setDisplayUserMeta(true);
+  }
+
+  async function updatePageState(view : string) {
+    if (view == "All") {
+      setShowContacts(false);
+      setDisplayUserMeta(false);
+      return ;
+    }
+
+    if (view == "Contacts") {
+      setShowContacts(true);
+      setDisplayUserMeta(false);
+      return ;
+    }
+
+    if (view == "Meta") {
+      console.log("Hello");
+      setDisplayUserMeta(true);
+      setShowContacts(false);
+      return ;
+    }
+  }
+
+  return (<> <ContainerBox>
       <Head>
         <title>Crypto Chat</title>
         <meta name="description" content="Next Generation Chat App!" />
@@ -522,14 +405,14 @@ const Home: NextPage = () => {
       </Head>
 
       {!loggedIn && <>
-        <LogInBox>
+        <div className={styles.timeWaste}>
           <h2> Welcom to Crypto Chat! </h2>
           <h3> Connect your web3 wallet to sign in </h3>
           <button type="button" onClick={() => connect()}>
             Connect
           </button>
           <h4> Logged Out </h4>
-        </LogInBox>
+        </div>
       </>}
 
       {loggedIn && <>
@@ -545,8 +428,8 @@ const Home: NextPage = () => {
                               db={db}
                               />
           </>}
-
         </>}
+
         {!newMessage && <>
           {!chatRoom && <>
             <HeaderBox>
@@ -555,13 +438,14 @@ const Home: NextPage = () => {
               </LogOutArrow>
               <h2>Messages</h2>
               <ul>
-                <li onClick={() => setShowContacts(false)}>All</li>
-                <li onClick={() => setShowContacts(true)}>Contacts</li>
+                <li onClick={() => updatePageState("All")}>All</li>
+                <li onClick={() => updatePageState("Contacts")}>Contacts</li>
+                {/* <li onClick={() => updatePageState("Meta")}> Meta </li> */}
                 <li onClick={() => setNewMessage(true)}>+</li>
               </ul>
             </HeaderBox>
 
-            {!showContacts && <>
+            {!showContacts && !displayUserMeta && <>
               <Inbox userAddress={address}
                     database={database}
                     updateToChatRoom={updateToChatRoom}
@@ -573,16 +457,25 @@ const Home: NextPage = () => {
               </NewMessageBox>
             </>}
 
-            {showContacts && <>
+            {showContacts && !displayUserMeta && <>
               <ContactBox userAddress={address} db={db} updateToChatRoom={updateToChatRoom} />
 
                 <AddContactButton onClick={() => setNewContact(true)}>
                   <Add size={35} color="white" />
                 </AddContactButton>
             </>}
+
+            {displayUserMeta && !showContacts && <>
+              {/* <MetaBox userERC721={userERC721}
+                       userERC20={userERC20}
+                       ERC20IsLoaded={ERC20IsLoaded}
+                       ERC721IsLoaded={ERC721IsLoaded}
+                       userAddress={address}
+                       /> */}
+            </>}
           </>}
 
-          {chatRoom && <>
+          {chatRoom && !displayUserMeta && <>
             {!newContact && <>
               <BackArrowBox>
                 <ArrowBack size={28} color="white" onClick={() => setChatRoom(false)} />
@@ -629,7 +522,7 @@ const Home: NextPage = () => {
           </>}
         </>}
       </>}
-  </>)
+      </ContainerBox> </>)
 }
 
 export default Home
