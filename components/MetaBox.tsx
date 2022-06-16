@@ -287,7 +287,8 @@ export function MetaBox({userERC721, userERC20, ERC20IsLoaded, ERC721IsLoaded, u
         await localStorage.setItem(_key721, _erc721data);
         await localStorage.setItem(_key20, _erc20data);
 
-        await getChachedMeta(_erc721data);
+        //rebuild
+        await getChachedMeta(_erc721data); 
 
         if (!isPullingMeta) {
             setErc721IsLoaded(true);
