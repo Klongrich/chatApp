@@ -49,7 +49,7 @@ img {
 `
 
 export const DaoMetaBox = styled.div`
-    height : 105px;
+    height : 75px;
     width: 50%;
 
     margin-top: 20px;
@@ -96,23 +96,24 @@ export const BottomLine = styled.div`
     height: 1px;
     width: 80%;
     margin-left: 20px;
-    margin-top: 0px;
+    margin-top: -5px;
 `
 
 export const NoNftsFoundBox = styled.div`
-    height: 220px;
+    height: 78px;
     width: 100%;
     text-align: center;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20xp;
+    padding-top: 0px;
+
+    margin-top: 45px;
+    margin-bottom: 45px;
 
     h3 {
-        font-size: 30px;
+        font-size: 25px;
     }
 
     h5 {
-        font-size: 18px;
+        font-size: 14px;
         text-decoration: underline;
     }
 `

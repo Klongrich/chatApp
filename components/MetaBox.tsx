@@ -397,7 +397,7 @@ export function MetaBox({userERC721, userERC20, ERC20IsLoaded, ERC721IsLoaded, u
                     <>
                         <DaoMetaBox>
                             <DaoMetaAmountBox>
-                                <Image src={data.LogoImage} height={40} width={40} />
+                                <Image src={data.LogoImage} height={35} width={35} />
                             </DaoMetaAmountBox>
                             <DaoLogoImageBox>
                                 {togglePrice && <>
