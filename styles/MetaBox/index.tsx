@@ -21,6 +21,9 @@ h4 {
     margin-top: 0px;
     text-decoration: underline;
 }
+
+font-family: SanFransico;
+font-size: 19px;
 `
 
 export const MetaNftBox = styled.div`
@@ -59,7 +62,7 @@ export const DaoMetaBox = styled.div`
     text-align: left;
 
     p {
-        font-size: 21px;
+        font-size: 18px;
     }
 `
 
@@ -100,17 +103,15 @@ export const BottomLine = styled.div`
 `
 
 export const NoNftsFoundBox = styled.div`
-    height: 78px;
+    height: 82px;
     width: 100%;
     text-align: center;
     padding-top: 0px;
 
-    margin-top: 45px;
-    margin-bottom: 45px;
+    margin-top: 55px;
+    margin-bottom: 55px;
 
-    h3 {
-        font-size: 25px;
-    }
+    font-size: 19px;
 
     h5 {
         font-size: 14px;
@@ -129,6 +130,8 @@ padding-left: 9px;
 padding-right: 9px;
 line-height: 1.8
 
+font-size: 19px;
+
 `
 
 export const FetchingDAOMeta = styled.div`
@@ -142,20 +145,26 @@ padding-left: 9px;
 padding-right: 9px;
 line-height: 1.8
 
+font-size: 19px;
+
 `
 
 export const ToggleBox = styled.div`
     text-align: right;
     margin-right: 40px;
-    margin-top: -53px;
+    margin-top: -73px;
+
+    font-size: 19px;
 `
 
 export const ToggleBoxText = styled.div`
     margin-right: 45px;
+    padding-top: 1px;
+
 `
 
 export const ToggleBoxSwitch = styled.div`
-    margin-top: -42px;
+    margin-top: -48px;
 `
 
 export const PullNFTsBox = styled.div`
@@ -203,4 +212,11 @@ export const MetaLoadingBox = styled.div`
     }
 
     height: 160px;
+`
+
+export const HeaderText = styled.div`
+    font-size: 19px;
+    font-family: san-fransico;
+
+    padding-left: 22px;
 `

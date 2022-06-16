@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { cutUserAddress } from "../utils/strings/cutUserAddress";
-import { Container, ProfilePicBox, ContactContaier, ContactsPublicKeyBox } from "../styles/ContactBox";
+import { Container, ProfilePicBox, ContactContaier, ContactsPublicKeyBox, SyncBox } from "../styles/ContactBox";
 
 export const ContactBox = ({userAddress, updateToChatRoom} : any) => {
 
@@ -63,6 +63,10 @@ export const ContactBox = ({userAddress, updateToChatRoom} : any) => {
                                 <p> {cutUserAddress(data.publicKey)} </p>
                             </ContactsPublicKeyBox>
                         </ContactContaier>
+                        <SyncBox>
+                            <h5> Sync </h5>
+                        </SyncBox>
+                        <br /> <br />
                         </>}
                     </>
                 )}

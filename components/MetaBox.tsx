@@ -29,7 +29,8 @@ import { MetaDisplayBox,
         PullNFTsBox,
         MetaInitBox,
         MetaLoadingBox,
-        FetchingDAOMeta
+        FetchingDAOMeta,
+        HeaderText
 } from "../styles/MetaBox";
 
 
@@ -288,7 +289,7 @@ export function MetaBox({userERC721, userERC20, ERC20IsLoaded, ERC721IsLoaded, u
         await localStorage.setItem(_key20, _erc20data);
 
         //rebuild
-        await getChachedMeta(_erc721data); 
+        await getChachedMeta(_erc721data);
 
         if (!isPullingMeta) {
             setErc721IsLoaded(true);
@@ -326,11 +327,13 @@ export function MetaBox({userERC721, userERC20, ERC20IsLoaded, ERC721IsLoaded, u
         </>}
 
         {hasPulledMeta && <>
-            <h2> nft </h2>
+            <HeaderText>
+                <h3> nft </h3>
+            </HeaderText>
             <ToggleBox>
                 {togglePrice && <>
                     <ToggleBoxText>
-                        <h3>Price</h3>
+                        <h3>price</h3>
                     </ToggleBoxText>
                     <ToggleBoxSwitch>
                         <ToggleOn size={30} onClick={() => setTogglePrice(!togglePrice)} />
@@ -338,7 +341,7 @@ export function MetaBox({userERC721, userERC20, ERC20IsLoaded, ERC721IsLoaded, u
                 </>}
                 {!togglePrice && <>
                     <ToggleBoxText>
-                        <h3>Amount</h3>
+                        <h3>amount</h3>
                     </ToggleBoxText>
                     <ToggleBoxSwitch>
                         <ToggleOff size={30} onClick={() => setTogglePrice(!togglePrice)}/>
@@ -347,7 +350,7 @@ export function MetaBox({userERC721, userERC20, ERC20IsLoaded, ERC721IsLoaded, u
             </ToggleBox>
             {!erc721IsLoaded && <>
                 <FetchingNFTMeta>
-                    <h2> fetching nfts from ipfs please wait ...... </h2>
+                    <h3> fetching nft meta ...... </h3>
                 </FetchingNFTMeta>
             </>}
             {erc721IsLoaded && hasNfts && <>
@@ -362,7 +365,6 @@ export function MetaBox({userERC721, userERC20, ERC20IsLoaded, ERC721IsLoaded, u
                     )}
                     </AllMetaNftBox>
                     <h4 onClick={() => setViewMoreERC721(false)}> close </h4>
-
                 </>}
 
                 {!viewMoreERC721 && <>
@@ -376,18 +378,20 @@ export function MetaBox({userERC721, userERC20, ERC20IsLoaded, ERC721IsLoaded, u
 
             {erc721IsLoaded && !hasNfts && <>
                  <NoNftsFoundBox>
-                    <h3> No NFTs Found! </h3>
-                    <h5> <a href="https://x2y2.io/"> Click Here To Purchase </a> </h5>
+                    <h3> no nfts </h3>
+                    <h5> <a href="https://x2y2.io/"> click here to purchase </a> </h5>
                 </NoNftsFoundBox>
             </>}
 
             {!viewMoreERC721 && <>
-                <h2> dao </h2>
+                <HeaderText>
+                    <h3> dao </h3>
+                </HeaderText>
             </>}
 
             {!erc20IsLoaded && !viewMoreERC721 && <>
                 <FetchingDAOMeta>
-                    <h2> fetching meta from blockchain please wait ...... </h2>
+                    <h3> fetching dao meta ...... </h3>
                 </FetchingDAOMeta>
             </>}
 
@@ -446,7 +450,7 @@ export function MetaBox({userERC721, userERC20, ERC20IsLoaded, ERC721IsLoaded, u
 
                     <DaoMetaBox>
                         <DaoMetaAmountBox>
-                            <Image src={exampleMeta[2].LogoImage} height={40} width={40} />
+                            <Image src={exampleMeta[2].LogoImage} height={35} width={35} />
                         </DaoMetaAmountBox>
                         <DaoLogoImageBox>
                             {togglePrice && <>
@@ -461,7 +465,7 @@ export function MetaBox({userERC721, userERC20, ERC20IsLoaded, ERC721IsLoaded, u
 
                     <DaoMetaBox>
                         <DaoMetaAmountBox>
-                            <Image src={exampleMeta[3].LogoImage} height={40} width={40} />
+                            <Image src={exampleMeta[3].LogoImage} height={35} width={35} />
                         </DaoMetaAmountBox>
                         <DaoLogoImageBox>
                             {togglePrice && <>
