@@ -49,7 +49,7 @@ import { HeaderBox,
         ContainerBox
 } from "../styles/pages";
 
-// import { MetaBox } from "../components/MetaBox";
+import { MetaBox } from "../components/MetaBox";
 
 //Used to get all ERC20 or E721 Token Meta of any address
 
@@ -440,7 +440,7 @@ const Home: NextPage = () => {
               <ul>
                 <li onClick={() => updatePageState("All")}>All</li>
                 <li onClick={() => updatePageState("Contacts")}>Contacts</li>
-                {/* <li onClick={() => updatePageState("Meta")}> Meta </li> */}
+                <li onClick={() => updatePageState("Meta")}> Meta </li>
                 <li onClick={() => setNewMessage(true)}>+</li>
               </ul>
             </HeaderBox>
@@ -466,12 +466,12 @@ const Home: NextPage = () => {
             </>}
 
             {displayUserMeta && !showContacts && <>
-              {/* <MetaBox userERC721={userERC721}
+              <MetaBox userERC721={userERC721}
                        userERC20={userERC20}
                        ERC20IsLoaded={ERC20IsLoaded}
                        ERC721IsLoaded={ERC721IsLoaded}
                        userAddress={address}
-                       /> */}
+                       />
             </>}
           </>}
 

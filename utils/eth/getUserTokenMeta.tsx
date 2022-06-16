@@ -24,8 +24,8 @@ export async function GetUserTokenMeta(
         setUserERC20(userERC20meta);
         setERC20IsLoaded(true);
 
-        let _key20 = address + "userERC721meta";
-        let _data20 = JSON.stringify(userERC721meta);
+        let _key20 = address + "userERC20meta";
+        let _data20 = JSON.stringify(userERC20meta);
 
         await localStorage.setItem(_key20, _data20);
 
@@ -33,3 +33,4 @@ export async function GetUserTokenMeta(
         console.log(userERC20meta);
         console.log(userERC721meta);
     }
+
