@@ -75,7 +75,7 @@ export const DaoMetaAmountBox = styled.div`
 export const DaoLogoImageBox = styled.div`
     height: 50px;
     width: 100%;
-    padding-left: 95px;
+    padding-left: 87px;
     margin-top: -27px;
 `
 
@@ -96,7 +96,7 @@ export const BottomLine = styled.div`
     height: 1px;
     width: 80%;
     margin-left: 20px;
-    margin-top: -5px;
+    margin-top: -7px;
 `
 
 export const NoNftsFoundBox = styled.div`

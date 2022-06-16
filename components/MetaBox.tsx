@@ -416,7 +416,7 @@ export function MetaBox({userERC721, userERC20, ERC20IsLoaded, ERC721IsLoaded, u
                 {!viewMoreERC20 && <>
                     <DaoMetaBox>
                         <DaoMetaAmountBox>
-                            <Image src={exampleMeta[0].LogoImage} height={40} width={40} />
+                            <Image src={exampleMeta[0].LogoImage} height={35} width={35} />
                         </DaoMetaAmountBox>
                         <DaoLogoImageBox>
                             {togglePrice && <>
@@ -431,7 +431,7 @@ export function MetaBox({userERC721, userERC20, ERC20IsLoaded, ERC721IsLoaded, u
 
                     <DaoMetaBox>
                         <DaoMetaAmountBox>
-                            <Image src={exampleMeta[1].LogoImage} height={40} width={40} />
+                            <Image src={exampleMeta[1].LogoImage} height={35} width={35} />
                         </DaoMetaAmountBox>
                         <DaoLogoImageBox>
                             {togglePrice && <>
