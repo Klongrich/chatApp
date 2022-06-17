@@ -458,7 +458,7 @@ const Home: NextPage = () => {
             </>}
 
             {showContacts && !displayUserMeta && <>
-              <ContactBox userAddress={address} db={db} updateToChatRoom={updateToChatRoom} />
+              <ContactBox userAddress={address} db={db} updateToChatRoom={updateToChatRoom} contactList={userInboxMessages} />
 
                 <AddContactButton onClick={() => setNewContact(true)}>
                   <Add size={35} color="white" />

@@ -23,7 +23,6 @@ export const ChatRoom = ({fromAddress, toAddress, toAlias, database} : any ) => 
     const [chatMessages, setChatMessages] = useState([{from: "", message: "", time: ""}]);
     const [message, setMessage] = useState("");
 
-
     const [isMobile, setIsMobile] = useState(false);
 
     function cutUserAddress(address : string) {

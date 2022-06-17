@@ -2,37 +2,43 @@ import React, {useEffect, useState} from "react";
 import { cutUserAddress } from "../utils/strings/cutUserAddress";
 import { Container, ProfilePicBox, ContactContaier, ContactsPublicKeyBox, SyncBox } from "../styles/ContactBox";
 
-export const ContactBox = ({userAddress, updateToChatRoom} : any) => {
+export const ContactBox = ({userAddress, updateToChatRoom, contactList} : any) => {
 
     const [newContact, setNewContact] = useState(false);
     const [allContactsInfo, setAllContactsInfo] = useState([{}]);
-
-    function allStorage() {
-        var values = [],
-            keys = Object.keys(localStorage),
+ 
+    //FAKE storage call
+    async function allStorage() {
+        var valuesX = [],
+            keys = await Object.keys(localStorage),
             i = keys.length;
 
         while ( i-- ) {
-            values.push(localStorage.getItem(keys[i]) );
+            valuesX.push(localStorage.getItem(keys[i]) );
         }
-        return values;
+        return valuesX;
     }
 
-    useEffect(() => {
-        //If no storgae is returned, call databse to get contacts and set localstoage.
-        //Edgecase for users having the same wallet but on a different web-broswer.
-        let userCache = allStorage();
+    async function loadUserInfo() {
+        let userCache = await allStorage();
 
         let cachedContent = [{
             alias : "",
             publicKey: ""
         }];
 
+        console.log(userCache);
+
         for (let x = 0; x < userCache.length; x++) {
             //@ts-ignore
             if (userCache[x].includes("0x")) {
                 //@ts-ignore
+
+                console.log(userCache[x]);
+
+                //@ts-ignore
                 let _temp = userCache[x].split(":");
+
                 if (_temp[1]) {
                     let userPublicKey = _temp[0].trim();
 
@@ -47,6 +53,18 @@ export const ContactBox = ({userAddress, updateToChatRoom} : any) => {
             }
         }
         setAllContactsInfo(cachedContent);
+    }
+
+    useEffect(() => {
+        let _tempHolder : any =  [];
+
+        for (let x = 0; x < contactList.length; x++ ) {
+            _tempHolder.push(contactList[x]);
+        }
+
+        let sortedArray = _tempHolder.sort((a : any, b : any) => (a.alias > b.alias) ? 1 : -1);
+        console.log(sortedArray);
+        setAllContactsInfo(sortedArray);
     }, [])
 
     return(
@@ -55,12 +73,12 @@ export const ContactBox = ({userAddress, updateToChatRoom} : any) => {
                 <Container>
                 {allContactsInfo.map((data : any) =>
                     <>
-                        {data.publicKey != "" && data.alias != "true,\"accounts\"" && <> 
-                        <ContactContaier onClick={() => updateToChatRoom(data.publicKey, userAddress, data.alias)}>
+                        {data.from != "" && data.alias != "true,\"accounts\"" && data.alias != "" && <>
+                        <ContactContaier onClick={() => updateToChatRoom(data.from, userAddress, data.alias)}>
                             <ProfilePicBox />
                             <h4> <strong> {data.alias} </strong> </h4>
                             <ContactsPublicKeyBox>
-                                <p> {cutUserAddress(data.publicKey)} </p>
+                                <p> {cutUserAddress(data.from)} </p>
                             </ContactsPublicKeyBox>
                         </ContactContaier>
                         <SyncBox>

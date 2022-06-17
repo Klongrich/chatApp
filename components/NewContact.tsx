@@ -146,7 +146,9 @@ export const NewContact = ({userAddress, contactPublicKey, db, setNewContact, up
 
         await setDoc(doc(db, userAddress, contactPublicKey), docContactData);
 
-        await localStorage.setItem(contactPublicKey, contactPublicKey + ":" + alias);
+        let aliasRenderKey = contactPublicKey +  userAddress + "alias";
+
+        await localStorage.setItem(aliasRenderKey, contactPublicKey + ":" + alias);
 
         await writeToCache(contactPublicKey + userAddress, docContactData, contactPublicKey);
 
