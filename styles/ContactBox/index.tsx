@@ -25,6 +25,8 @@ export const ProfilePicBox = styled.div`
     margin-top: 20px;
     margin-left: 5px;
     margin-bottom: -65px;
+
+    z-index: 10;
 `
 
 export const ContactsPublicKeyBox = styled.div`
@@ -64,4 +66,23 @@ export const SyncBox = styled.div`
     margin-top: -82px;
 
     color: #a3a3a3;
+
+    :hover {
+        cursor : pointer;
+    }
+`
+
+export const SyncingBox = styled.div`
+    text-align: right;
+    padding-right: 27px;
+    margin-top: -82px;
+
+    color: yellow;
+`
+export const SyncedBox = styled.div`
+    text-align: right;
+    padding-right: 27px;
+    margin-top: -82px;
+
+    color: green;
 `
